@@ -17,6 +17,21 @@ namespace
         };
         return RGB(mix(a, b, 0), mix(a, b, 8), mix(a, b, 16));
     }
+
+    // True when the lowercase path contains the segment at a boundary.
+    bool ContainsSegment(const std::wstring& lowercasePath, const std::wstring& segment)
+    {
+        return lowercasePath.find(segment + L"\\") != std::wstring::npos ||
+            lowercasePath.ends_with(segment);
+    }
+
+    std::wstring GetEnvironmentFolder(const wchar_t* variable)
+    {
+        wchar_t buffer[MAX_PATH]{};
+        if (GetEnvironmentVariableW(variable, buffer, MAX_PATH) == 0) return {};
+        std::wstring folder(buffer);
+        return MakeLower(TrimString(folder, L'\\', true));
+    }
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -64,6 +79,124 @@ bool CFileInfoView::IsItemDeletable(const CItem* item) const
         item->HasShellIdentity() && item->IsTypeOrFlag(IT_DIRECTORY, IT_FILE);
 }
 
+CFileInfoView::Protection CFileInfoView::ClassifyProtection(const CItem* item, const DWORD attributes) const
+{
+    if (!item->SupportsFilesystemApis() || item->IsTypeOrFlag(ITF_MTP, ITF_REMOTE)) return Protection::None;
+    if (!item->IsTypeOrFlag(IT_DRIVE, IT_DIRECTORY, IT_FILE)) return Protection::None;
+
+    const std::wstring path = MakeLower(item->GetPath());
+    const std::wstring name = MakeLower(item->GetName());
+    if (path.empty()) return Protection::None;
+
+    // Files managed entirely by Windows at a volume root
+    if (name == L"hiberfil.sys") return Protection::Hiberfil;
+    if (name == L"pagefile.sys" || name == L"swapfile.sys") return Protection::Pagefile;
+
+    // Protected system folders
+    if (path.find(L"\\$recycle.bin") != std::wstring::npos) return Protection::RecycleBin;
+    if (path.find(L"\\system volume information") != std::wstring::npos) return Protection::RestorePoints;
+
+    // The Windows directory and its component store
+    std::wstring windowsDirectory(MAX_PATH, L'\0');
+    windowsDirectory.resize(GetWindowsDirectoryW(windowsDirectory.data(), MAX_PATH));
+    const std::wstring windowsLower = MakeLower(TrimString(windowsDirectory, L'\\', true));
+    if (!windowsLower.empty() && (path == windowsLower || path.starts_with(windowsLower + L"\\")))
+    {
+        if (ContainsSegment(path, L"\\winsxs")) return Protection::ComponentStore;
+        if (item->IsTypeOrFlag(IT_FILE) && item->HasExtension(L".sys")) return Protection::SystemDriver;
+        return Protection::SystemFolder;
+    }
+
+    // Installed programs
+    for (const wchar_t* variable : { L"ProgramFiles", L"ProgramFiles(x86)", L"ProgramW6432" })
+    {
+        const std::wstring programs = GetEnvironmentFolder(variable);
+        if (programs.empty()) continue;
+        if (path == programs || path.starts_with(programs + L"\\")) return Protection::InstalledProgram;
+    }
+
+    (void)attributes;
+    return Protection::None;
+}
+
+std::wstring CFileInfoView::MigratableHint(const CItem* item) const
+{
+    if (!item->IsTypeOrFlag(IT_DIRECTORY) || !item->SupportsFilesystemApis() ||
+        item->IsScanRoot() || item->IsRootItem())
+    {
+        return {};
+    }
+
+    const std::wstring path = MakeLower(item->GetPath());
+    if (ContainsSegment(path, L"\\wechat files") || ContainsSegment(path, L"\\xwechat_files"))
+    {
+        return Localization::Lookup(IDS_INFO_MIGRATE_WECHAT);
+    }
+    if (ContainsSegment(path, L"\\tencent files"))
+    {
+        return Localization::Lookup(IDS_INFO_MIGRATE_QQ);
+    }
+    if (path.find(L"\\appdata\\roaming\\kingsoft") != std::wstring::npos ||
+        path.find(L"\\appdata\\local\\kingsoft") != std::wstring::npos)
+    {
+        return Localization::Lookup(IDS_INFO_MIGRATE_WPS);
+    }
+    return {};
+}
+
+bool CFileInfoView::CreateDirectoryJunction(const std::wstring& linkPath, const std::wstring& targetPath)
+{
+    if (linkPath.empty() || targetPath.empty()) return false;
+    if (!CreateDirectoryW(linkPath.c_str(), nullptr)) return false;
+
+    const HANDLE handle = CreateFileW(linkPath.c_str(), GENERIC_WRITE, FILE_SHARE_READ, nullptr,
+        OPEN_EXISTING, FILE_FLAG_OPEN_REPARSE_POINT | FILE_FLAG_BACKUP_SEMANTICS, nullptr);
+    if (handle == INVALID_HANDLE_VALUE)
+    {
+        RemoveDirectoryW(linkPath.c_str());
+        return false;
+    }
+
+    struct MountPointHeader
+    {
+        DWORD ReparseTag;
+        WORD ReparseDataLength;
+        WORD Reserved;
+        WORD SubstituteNameOffset;
+        WORD SubstituteNameLength;
+        WORD PrintNameOffset;
+        WORD PrintNameLength;
+    };
+
+    // The substitute name must be an absolute path in the \??\ namespace;
+    // a trailing backslash mirrors what mklink /J stores.
+    const std::wstring substitute = L"\\??\\" + targetPath + L"\\";
+    const std::wstring printName = targetPath;
+    const size_t substituteBytes = substitute.size() * sizeof(WCHAR);
+    const size_t printBytes = printName.size() * sizeof(WCHAR);
+
+    std::vector<BYTE> buffer(sizeof(MountPointHeader) + substituteBytes + sizeof(WCHAR) + printBytes + sizeof(WCHAR));
+    auto* mountPoint = reinterpret_cast<MountPointHeader*>(buffer.data());
+    mountPoint->ReparseTag = IO_REPARSE_TAG_MOUNT_POINT;
+    mountPoint->Reserved = 0;
+    mountPoint->SubstituteNameOffset = 0;
+    mountPoint->SubstituteNameLength = static_cast<WORD>(substituteBytes);
+    mountPoint->PrintNameOffset = static_cast<WORD>(substituteBytes + sizeof(WCHAR));
+    mountPoint->PrintNameLength = static_cast<WORD>(printBytes);
+    mountPoint->ReparseDataLength = static_cast<WORD>(sizeof(MountPointHeader) - offsetof(MountPointHeader, SubstituteNameOffset) +
+        substituteBytes + sizeof(WCHAR) + printBytes + sizeof(WCHAR));
+    memcpy(buffer.data() + sizeof(MountPointHeader), substitute.c_str(), substituteBytes + sizeof(WCHAR));
+    memcpy(buffer.data() + sizeof(MountPointHeader) + substituteBytes + sizeof(WCHAR),
+        printName.c_str(), printBytes + sizeof(WCHAR));
+
+    DWORD returned = 0;
+    const bool ok = DeviceIoControl(handle, FSCTL_SET_REPARSE_POINT, buffer.data(),
+        static_cast<DWORD>(buffer.size()), nullptr, 0, &returned, nullptr) != FALSE;
+    CloseHandle(handle);
+    if (!ok) RemoveDirectoryW(linkPath.c_str());
+    return ok;
+}
+
 void CFileInfoView::RefreshInfo()
 {
     m_item = nullptr;
@@ -72,8 +205,9 @@ void CFileInfoView::RefreshInfo()
     m_subtitle.clear();
     m_rows.clear();
     m_notes.clear();
-    m_btnRecycle = {};
-    m_btnDelete = {};
+    m_buttons.clear();
+    m_deletableRowIndex = -1;
+    m_deletableVerdict = -1;
 
     const auto model = CWinDirStatModel::Get();
     if (!model->HasRootItem()) return;
@@ -112,9 +246,14 @@ void CFileInfoView::RefreshInfo()
     }
 
     // Owner
+    std::wstring owner;
     if (m_item->IsTypeOrFlag(IT_FILE, IT_DIRECTORY))
     {
-        m_rows.emplace_back(Localization::Lookup(IDS_COL_OWNER), m_item->GetOwner());
+        owner = m_item->GetOwner();
+        if (!owner.empty())
+        {
+            m_rows.emplace_back(Localization::Lookup(IDS_COL_OWNER), owner);
+        }
     }
 
     // Modification time comes from the model; creation and access times are
@@ -140,11 +279,77 @@ void CFileInfoView::RefreshInfo()
     }
     m_rows.emplace_back(Localization::Lookup(IDS_COL_ATTRIBUTES), FormatAttributes(attributes));
 
-    // Cleanup actions and their availability
-    m_btnRecycle.text = Localization::Lookup(IDS_INFO_BTN_RECYCLEBIN);
-    m_btnRecycle.command = ID_CLEANUP_DELETE_BIN;
-    m_btnDelete.text = Localization::Lookup(IDS_INFO_BTN_PERMANENT);
-    m_btnDelete.command = ID_CLEANUP_DELETE;
+    // Protection classification decides whether deletion or guidance is shown
+    const Protection protection = ClassifyProtection(m_item, attributes);
+
+    if (protection != Protection::None)
+    {
+        const std::wstring reason = protection == Protection::InstalledProgram ?
+            Localization::Lookup(IDS_INFO_DELETABLE_NO_PROGRAM) :
+            protection == Protection::Hiberfil || protection == Protection::Pagefile ||
+            protection == Protection::RecycleBin || protection == Protection::RestorePoints ?
+            Localization::Lookup(IDS_INFO_DELETABLE_NO_MANAGED) :
+            Localization::Lookup(IDS_INFO_DELETABLE_NO_SYSTEM);
+        m_deletableRowIndex = static_cast<int>(m_rows.size());
+        m_deletableVerdict = 0;
+        m_rows.emplace_back(Localization::Lookup(IDS_INFO_LABEL_DELETABLE), reason);
+
+        switch (protection)
+        {
+        case Protection::SystemFolder:
+            m_notes.emplace_back(Localization::Lookup(IDS_INFO_PROT_SYSTEMFOLDER));
+            m_buttons.push_back({ .text = Localization::Lookup(IDS_INFO_BTN_DISKCLEANUP), .command = ID_CLEANUP_DISK_CLEANUP, .enabled = true });
+            m_buttons.push_back({ .text = Localization::Lookup(IDS_INFO_BTN_STORAGESENSE), .command = ID_CLEANUP_STORAGE_SENSE, .enabled = true });
+            break;
+        case Protection::ComponentStore:
+            m_notes.emplace_back(Localization::Lookup(IDS_INFO_PROT_WINSXS));
+            m_buttons.push_back({ .text = Localization::Lookup(IDS_INFO_BTN_DISM), .command = ID_CLEANUP_DISM_ANALYZE, .enabled = true });
+            break;
+        case Protection::InstalledProgram:
+            m_notes.emplace_back(Localization::Lookup(IDS_INFO_PROT_PROGRAM));
+            m_buttons.push_back({ .text = Localization::Lookup(IDS_INFO_BTN_UNINSTALL), .command = ID_CLEANUP_REMOVE_PROGRAMS, .enabled = true });
+            break;
+        case Protection::SystemDriver:
+            m_notes.emplace_back(Localization::Lookup(IDS_INFO_PROT_DRIVER));
+            break;
+        case Protection::Hiberfil:
+            m_notes.emplace_back(Localization::Lookup(IDS_INFO_PROT_HIBERFIL));
+            m_buttons.push_back({ .text = Localization::Lookup(IDS_INFO_BTN_HIBERNATE), .command = ID_CLEANUP_HIBERNATE, .enabled = true });
+            break;
+        case Protection::Pagefile:
+            m_notes.emplace_back(Localization::Lookup(IDS_INFO_PROT_PAGEFILE));
+            m_buttons.push_back({ .text = Localization::Lookup(IDS_INFO_BTN_SYSADVANCED), .command = CMD_SYSADVANCED, .enabled = true });
+            break;
+        case Protection::RecycleBin:
+            m_notes.emplace_back(Localization::Lookup(IDS_INFO_PROT_RECYCLEBIN));
+            m_buttons.push_back({ .text = Localization::Lookup(IDS_INFO_BTN_EMPTYBIN), .command = ID_CLEANUP_EMPTY_BIN, .enabled = true });
+            break;
+        case Protection::RestorePoints:
+            m_notes.emplace_back(Localization::Lookup(IDS_INFO_PROT_RESTORE));
+            m_buttons.push_back({ .text = Localization::Lookup(IDS_INFO_BTN_SYSPROTECT), .command = CMD_SYSPROTECT, .enabled = true });
+            break;
+        default:
+            break;
+        }
+
+        // System-owned items require taking ownership before anything can touch them
+        const std::wstring ownerLower = MakeLower(owner);
+        if (ownerLower.find(L"trustedinstaller") != std::wstring::npos ||
+            ownerLower.find(L"nt authority\\system") != std::wstring::npos ||
+            ownerLower.ends_with(L"\\system"))
+        {
+            m_notes.emplace_back(Localization::Format(IDS_INFO_PROT_OWNER, owner));
+        }
+        return;
+    }
+
+    // Cleanup actions and their availability for ordinary items
+    ActionButton recycle;
+    recycle.text = Localization::Lookup(IDS_INFO_BTN_RECYCLEBIN);
+    recycle.command = ID_CLEANUP_DELETE_BIN;
+    ActionButton permanent;
+    permanent.text = Localization::Lookup(IDS_INFO_BTN_PERMANENT);
+    permanent.command = ID_CLEANUP_DELETE;
 
     if (!IsItemDeletable(m_item))
     {
@@ -153,12 +358,16 @@ void CFileInfoView::RefreshInfo()
             !m_item->IsTypeOrFlag(IT_DIRECTORY, IT_FILE) ?
             Localization::Lookup(IDS_INFO_DELETABLE_NO_VIRTUAL) :
             Localization::Lookup(IDS_INFO_DELETABLE_NO_PROTECTED);
+        m_deletableRowIndex = static_cast<int>(m_rows.size());
+        m_deletableVerdict = 0;
         m_rows.emplace_back(Localization::Lookup(IDS_INFO_LABEL_DELETABLE), reason);
         return;
     }
 
     const bool recycleBinOk = m_item->SupportsFilesystemApis() && !m_item->IsRootItem() &&
         IsLocalDrive(m_item->GetPath());
+    m_deletableRowIndex = static_cast<int>(m_rows.size());
+    m_deletableVerdict = 1;
     m_rows.emplace_back(Localization::Lookup(IDS_INFO_LABEL_DELETABLE),
         Localization::Lookup(IDS_INFO_DELETABLE_YES));
     m_notes.emplace_back(recycleBinOk ?
@@ -167,9 +376,148 @@ void CFileInfoView::RefreshInfo()
     {
         m_notes.emplace_back(Localization::Lookup(IDS_INFO_READONLY));
     }
+    if (attributes & FILE_ATTRIBUTE_SYSTEM)
+    {
+        m_notes.emplace_back(Localization::Lookup(IDS_INFO_ATTR_SYSTEM));
+    }
 
-    m_btnRecycle.enabled = recycleBinOk;
-    m_btnDelete.enabled = true;
+    recycle.enabled = recycleBinOk;
+    recycle.primary = true;
+    permanent.enabled = true;
+    permanent.primary = true;
+    if (recycle.enabled) m_buttons.push_back(recycle);
+    m_buttons.push_back(permanent);
+
+    // Known relocatable app data (WeChat, QQ, WPS) gets migration guidance
+    if (const std::wstring hint = MigratableHint(m_item); !hint.empty())
+    {
+        m_notes.emplace_back(hint);
+        m_buttons.push_back({ .text = Localization::Lookup(IDS_INFO_BTN_MIGRATE), .command = CMD_MIGRATE, .enabled = true });
+    }
+}
+
+void CFileInfoView::OnMigrate()
+{
+    const CItem* item = m_item;
+    if (item == nullptr || !item->IsTypeOrFlag(IT_DIRECTORY) ||
+        !item->SupportsFilesystemApis() || item->IsScanRoot())
+    {
+        return;
+    }
+
+    std::wstring source = item->GetPath();
+    TrimString(source, L'\\', true);
+    const std::wstring itemName = item->GetName();
+
+    const auto destination = CDialog::PickFolder();
+    if (!destination) return;
+    std::wstring dest = *destination;
+    TrimString(dest, L'\\', true);
+
+    // The destination must be on another volume and outside the source tree
+    wchar_t sourceVolume[MAX_PATH]{}, destVolume[MAX_PATH]{};
+    GetVolumePathNameW(source.c_str(), sourceVolume, MAX_PATH);
+    GetVolumePathNameW(dest.c_str(), destVolume, MAX_PATH);
+    const std::wstring sourceVolumeLower = MakeLower(sourceVolume);
+    const std::wstring destVolumeLower = MakeLower(destVolume);
+    const std::wstring sourceLower = MakeLower(source);
+    const std::wstring destLower = MakeLower(dest);
+    if (destLower.starts_with(sourceLower + L"\\") || destLower == sourceLower ||
+        sourceLower.starts_with(destLower + L"\\") || sourceVolumeLower == destVolumeLower)
+    {
+        MessageBoxW(GetMainWindowHandle(), Localization::Lookup(IDS_INFO_MIGRATE_BADDEST).c_str(),
+            GetAppTitle().c_str(), MB_OK | MB_ICONWARNING);
+        return;
+    }
+
+    const std::wstring destPath = dest + L"\\" + itemName;
+    if (GetFileAttributesW(destPath.c_str()) != INVALID_FILE_ATTRIBUTES)
+    {
+        MessageBoxW(GetMainWindowHandle(), Localization::Lookup(IDS_INFO_MIGRATE_DESTEXISTS).c_str(),
+            GetAppTitle().c_str(), MB_OK | MB_ICONWARNING);
+        return;
+    }
+
+    ULARGE_INTEGER freeBytesAvailable{};
+    if (GetDiskFreeSpaceExW(dest.c_str(), &freeBytesAvailable, nullptr, nullptr) &&
+        freeBytesAvailable.QuadPart < item->GetSizeLogical())
+    {
+        MessageBoxW(GetMainWindowHandle(), Localization::Format(IDS_INFO_MIGRATE_NOSPACE,
+            FormatBytes(item->GetSizeLogical()), FormatBytes(freeBytesAvailable.QuadPart)).c_str(),
+            GetAppTitle().c_str(), MB_OK | MB_ICONWARNING);
+        return;
+    }
+
+    const std::wstring confirmText = Localization::Format(IDS_INFO_MIGRATE_CONFIRM,
+        source, FormatBytes(item->GetSizeLogical()), destPath);
+    if (MessageBoxW(GetMainWindowHandle(), confirmText.c_str(), GetAppTitle().c_str(),
+        MB_YESNO | MB_ICONWARNING | MB_DEFBUTTON2) != IDYES)
+    {
+        return;
+    }
+
+    // Move the folder with the shell progress dialog, as the Move To command does
+    bool moved = false;
+    HRESULT moveResult = E_FAIL;
+    CProgressDlg(0, CProgressDlg::Flags::None, GetMainWindow(), [&](const CProgressDlg* pdlg)
+    {
+        // Initialize an STA for the shell file operation on this worker thread.
+        const ComApartmentScope com;
+        if (!com) return;
+
+        CComPtr<IFileOperation> fileOperation;
+        CComPtr<IShellItem> destShellItem;
+        CComPtr<IShellItem> sourceShellItem;
+        const auto flags = FOFX_SHOWELEVATIONPROMPT | FOF_NOCONFIRMATION | (COptions::ShowMicrosoftProgress ? 0 : FOF_NO_UI);
+        if (FAILED(::CoCreateInstance(CLSID_FileOperation, nullptr, CLSCTX_ALL, IID_PPV_ARGS(&fileOperation))) ||
+            FAILED(fileOperation->SetOwnerWindow(*pdlg)) ||
+            FAILED(fileOperation->SetOperationFlags(flags)) ||
+            FAILED(SHCreateItemFromParsingName(dest.c_str(), nullptr, IID_PPV_ARGS(&destShellItem))) ||
+            FAILED(SHCreateItemFromParsingName(source.c_str(), nullptr, IID_PPV_ARGS(&sourceShellItem))) ||
+            FAILED(fileOperation->MoveItem(sourceShellItem, destShellItem, nullptr, nullptr)))
+        {
+            return;
+        }
+
+        moveResult = PerformCancellableOperations(fileOperation, flags, [pdlg] { return pdlg->IsCancelled(); });
+        moved = moveResult == S_OK;
+    }).ShowModal();
+
+    if (!moved)
+    {
+        MessageBoxW(GetMainWindowHandle(), Localization::Format(IDS_INFO_MIGRATE_FAILED,
+            TranslateError(moveResult)).c_str(), GetAppTitle().c_str(), MB_OK | MB_ICONWARNING);
+        return;
+    }
+
+    // Locked files leave the source folder behind; do not junction an incomplete move
+    if (FolderExists(source))
+    {
+        MessageBoxW(GetMainWindowHandle(), Localization::Lookup(IDS_INFO_MIGRATE_LOCKED).c_str(),
+            GetAppTitle().c_str(), MB_OK | MB_ICONWARNING);
+    }
+    else if (CreateDirectoryJunction(source, destPath))
+    {
+        MessageBoxW(GetMainWindowHandle(), Localization::Format(IDS_INFO_MIGRATE_DONE, destPath).c_str(),
+            GetAppTitle().c_str(), MB_OK | MB_ICONINFORMATION);
+    }
+    else
+    {
+        MessageBoxW(GetMainWindowHandle(), Localization::Format(IDS_INFO_MIGRATE_JUNCTIONFAIL,
+            source, destPath).c_str(), GetAppTitle().c_str(), MB_OK | MB_ICONWARNING);
+    }
+
+    // Refresh the scan so the moved data and the junction show up correctly
+    std::vector<CItem*> refresh;
+    if (item->GetParent() != nullptr) refresh.push_back(item->GetParent());
+    if (const auto destItem = CWinDirStatModel::Get()->GetRootItem()->FindItemByPath(dest); destItem != nullptr)
+    {
+        refresh.push_back(destItem);
+    }
+    if (!refresh.empty())
+    {
+        CWinDirStatModel::Get()->RefreshItem(refresh);
+    }
 }
 
 void CFileInfoView::OnDraw(CDC* pdc)
@@ -189,14 +537,30 @@ void CFileInfoView::OnDraw(CDC* pdc)
     const CFont titleFont(font, FW_SEMIBOLD);
     const GdiObjectSelection fontSelection(pdc, font);
 
+    // Derive the row height from the actual font so CJK text never overflows its slot
+    const std::optional<TEXTMETRICW> metrics = pdc->GetTextMetrics();
+    const int fontLine = metrics ?
+        static_cast<int>(metrics->tmHeight + metrics->tmExternalLeading) : ScaleForDpi(16);
+    const int rowHeight = std::max(ScaleForDpi(18), fontLine + ScaleForDpi(4));
+
     constexpr int margin = 8;
     const int pad = ScaleForDpi(margin);
     const int gap = ScaleForDpi(2);
-    const int lineGap = ScaleForDpi(4);
-    const int rowHeight = ScaleForDpi(18);
-    const int buttonHeight = ScaleForDpi(26);
+    const int lineGap = ScaleForDpi(6);
+    const int buttonHeight = rowHeight + ScaleForDpi(10);
     const int buttonGap = ScaleForDpi(8);
     const int iconTextGap = ScaleForDpi(6);
+    const int noteWidth = rcClient.Width() - pad * 2;
+
+    // Measure how many lines each guidance note occupies when wrapped
+    std::vector<int> noteLines;
+    noteLines.reserve(m_notes.size());
+    for (const std::wstring& note : m_notes)
+    {
+        CRect rcMeasure(0, 0, noteWidth, 0);
+        const int height = pdc->DrawText(note, rcMeasure, DT_CALCRECT | DT_WORDBREAK | DT_NOPREFIX);
+        noteLines.push_back(std::max(1, (height + rowHeight - 1) / rowHeight));
+    }
 
     int y = rcClient.top + pad;
 
@@ -242,10 +606,31 @@ void CFileInfoView::OnDraw(CDC* pdc)
         y += rowHeight + gap;
     }
 
-    // Reserve the bottom strip for the cleanup actions
-    const int notesHeight = static_cast<int>(m_notes.size()) * (rowHeight + gap);
-    const int bottomStrip = lineGap + rowHeight + gap + notesHeight + buttonHeight + gap + rowHeight + pad;
+    // Measure the wrapped button rows to reserve the bottom strip
+    int buttonRows = m_buttons.empty() ? 0 : 1;
+    int measureX = rcClient.left + pad;
+    for (const ActionButton& button : m_buttons)
+    {
+        const int width = pdc->GetTextExtent(button.text).cx + ScaleForDpi(24);
+        if (measureX + width > rcClient.right - pad && measureX > rcClient.left + pad)
+        {
+            buttonRows++;
+            measureX = rcClient.left + pad;
+        }
+        measureX += width + buttonGap;
+    }
+
+    const int noteTotalLines = std::accumulate(noteLines.begin(), noteLines.end(), 0);
+    const int notesHeight = noteTotalLines * rowHeight + static_cast<int>(m_notes.size()) * gap;
+    const int buttonsHeight = buttonRows * (buttonHeight + gap);
+    const int bottomStrip = lineGap + rowHeight + gap + notesHeight + buttonsHeight + rowHeight + pad;
     const int rowsBottom = rcClient.bottom - bottomStrip;
+
+    // Verdict colors for the prominent deletability row
+    const bool darkMode = DarkMode::IsDarkModeActive();
+    const COLORREF verdictColor = m_deletableVerdict == 0 ?
+        (darkMode ? RGB(255, 106, 106) : RGB(196, 30, 30)) :
+        (darkMode ? RGB(105, 216, 157) : RGB(0, 128, 64));
 
     // Separator above the detail rows
     if (y < rowsBottom)
@@ -262,20 +647,42 @@ void CFileInfoView::OnDraw(CDC* pdc)
     }
     labelWidth += ScaleForDpi(10);
 
+    int rowIndex = 0;
     for (const auto& [label, value] : m_rows)
     {
         if (y + rowHeight > rowsBottom) break;
+
+        if (rowIndex == m_deletableRowIndex)
+        {
+            // Highlight band behind the verdict row so it stands out
+            const CRect rcBand(rcClient.left + pad - ScaleForDpi(4), y - ScaleForDpi(2),
+                rcClient.right - pad + ScaleForDpi(4), y + rowHeight + ScaleForDpi(2));
+            pdc->FillSolidRect(rcBand, BlendColors(windowColor, verdictColor, 0.14));
+        }
+
         pdc->SetTextColor(labelColor);
         CRect rcLabel(rcClient.left + pad, y, rcClient.left + pad + labelWidth, y + rowHeight);
         pdc->DrawText(label, rcLabel, DT_SINGLELINE | DT_END_ELLIPSIS | DT_VCENTER | DT_NOPREFIX);
 
-        pdc->SetTextColor(textColor);
-        CRect rcValue(rcLabel.right, y, rcClient.right - pad, y + rowHeight);
-        pdc->DrawText(value, rcValue, DT_SINGLELINE | DT_END_ELLIPSIS | DT_VCENTER | DT_NOPREFIX);
+        if (rowIndex == m_deletableRowIndex)
+        {
+            // Prominent bold verdict in green or red
+            const GdiObjectSelection boldSelection(pdc, titleFont);
+            pdc->SetTextColor(verdictColor);
+            CRect rcValue(rcLabel.right, y, rcClient.right - pad, y + rowHeight);
+            pdc->DrawText(value, rcValue, DT_SINGLELINE | DT_END_ELLIPSIS | DT_VCENTER | DT_NOPREFIX);
+        }
+        else
+        {
+            pdc->SetTextColor(textColor);
+            CRect rcValue(rcLabel.right, y, rcClient.right - pad, y + rowHeight);
+            pdc->DrawText(value, rcValue, DT_SINGLELINE | DT_END_ELLIPSIS | DT_VCENTER | DT_NOPREFIX);
+        }
         y += rowHeight + gap;
+        rowIndex++;
     }
 
-    // Cleanup section
+    // Cleanup and guidance section
     y = rcClient.bottom - bottomStrip;
     pdc->FillSolidRect(rcClient.left + pad, y, rcClient.Width() - pad * 2, 1, frameColor);
     y += lineGap;
@@ -286,23 +693,32 @@ void CFileInfoView::OnDraw(CDC* pdc)
         DT_SINGLELINE | DT_END_ELLIPSIS | DT_VCENTER | DT_NOPREFIX);
     y += rowHeight + gap;
 
-    for (const std::wstring& note : m_notes)
+    pdc->SetTextColor(textColor);
+    for (const auto [noteIndex, note] : std::views::enumerate(m_notes))
     {
-        if (y + rowHeight > rcClient.bottom - pad) break;
-        CRect rcNote(rcClient.left + pad, y, rcClient.right - pad, y + rowHeight);
-        pdc->DrawText(note, rcNote, DT_SINGLELINE | DT_END_ELLIPSIS | DT_VCENTER | DT_NOPREFIX);
-        y += rowHeight + gap;
+        const int lines = noteLines[noteIndex];
+        if (y + lines * rowHeight > rcClient.bottom - pad) break;
+        CRect rcNote(rcClient.left + pad, y, rcClient.right - pad, y + lines * rowHeight);
+        pdc->DrawText(note, rcNote, DT_WORDBREAK | DT_NOPREFIX);
+        y += lines * rowHeight + gap;
     }
 
-    // Action buttons, left-aligned on one line
+    // Action buttons, wrapped onto several rows when needed
     int x = rcClient.left + pad;
-    for (auto* button : { &m_btnRecycle, &m_btnDelete })
+    int index = 0;
+    for (ActionButton& button : m_buttons)
     {
-        const int width = pdc->GetTextExtent(button->text).cx + ScaleForDpi(24);
-        button->rect = CRect(x, y, std::min<int>(x + width, rcClient.right - pad), y + buttonHeight);
-        const bool hover = m_mouseTracked && button->rect.Contains(m_mousePoint);
-        DrawButton(pdc, *button, hover, m_pressedButton == (button == &m_btnRecycle ? 0 : 1));
-        x = button->rect.right + buttonGap;
+        const int width = pdc->GetTextExtent(button.text).cx + ScaleForDpi(24);
+        if (x + width > rcClient.right - pad && x > rcClient.left + pad)
+        {
+            x = rcClient.left + pad;
+            y += buttonHeight + gap;
+        }
+        button.rect = CRect(x, y, std::min<int>(x + width, rcClient.right - pad), y + buttonHeight);
+        const bool hover = m_mouseTracked && button.rect.Contains(m_mousePoint);
+        DrawButton(pdc, button, hover, m_pressedButton == index);
+        x = button.rect.right + buttonGap;
+        index++;
     }
     y += buttonHeight + gap;
 
@@ -325,12 +741,17 @@ void CFileInfoView::DrawButton(CDC* pdc, const ActionButton& button,
     const COLORREF textColor = DarkMode::Color(DarkMode::ColorRole::WindowText);
     const COLORREF disabledColor = DarkMode::Color(DarkMode::ColorRole::DisabledText);
     const COLORREF accentColor = DarkMode::Color(DarkMode::ColorRole::Selection);
+    const COLORREF accentTextColor = DarkMode::Color(DarkMode::ColorRole::SelectionText);
 
+    // Primary buttons (the delete actions) use a solid accent fill for prominence
     const COLORREF fill = !button.enabled ? windowColor :
+        button.primary ? (pressed ? BlendColors(accentColor, RGB(0, 0, 0), 0.3) :
+            hover ? BlendColors(accentColor, RGB(255, 255, 255), 0.15) : accentColor) :
         pressed ? BlendColors(controlColor, accentColor, 0.55) :
         hover ? BlendColors(controlColor, accentColor, 0.2) : controlColor;
-    const COLORREF border = !button.enabled ? frameColor : hover || pressed ? accentColor : frameColor;
-    const COLORREF text = button.enabled ? textColor : disabledColor;
+    const COLORREF border = !button.enabled ? frameColor : button.primary ? accentColor :
+        hover || pressed ? accentColor : frameColor;
+    const COLORREF text = button.enabled ? (button.primary ? accentTextColor : textColor) : disabledColor;
 
     pdc->FillSolidRect(button.rect, fill);
     pdc->FillSolidRect(button.rect.left, button.rect.top, button.rect.Width(), 1, border);
@@ -361,9 +782,9 @@ void CFileInfoView::OnMouseMove(const UINT /*nFlags*/, const CPoint point)
     }
 
     // Repaint while the pointer moves across the action buttons
-    for (const ActionButton* button : { &m_btnRecycle, &m_btnDelete })
+    for (const ActionButton& button : m_buttons)
     {
-        if (button->enabled && button->rect.Contains(point))
+        if (button.enabled && button.rect.Contains(point))
         {
             Invalidate(false);
             break;
@@ -383,9 +804,9 @@ LRESULT CFileInfoView::OnMouseLeave(const WPARAM, const LPARAM)
 void CFileInfoView::OnLButtonDown(const UINT /*nFlags*/, const CPoint point)
 {
     m_mousePoint = point;
-    for (const auto [index, button] : std::views::enumerate(std::array{ &m_btnRecycle, &m_btnDelete }))
+    for (const auto [index, button] : std::views::enumerate(m_buttons))
     {
-        if (button->enabled && button->rect.Contains(point))
+        if (button.enabled && button.rect.Contains(point))
         {
             m_pressedButton = static_cast<int>(index);
             SetCapture();
@@ -397,15 +818,28 @@ void CFileInfoView::OnLButtonDown(const UINT /*nFlags*/, const CPoint point)
 
 void CFileInfoView::OnLButtonUp(const UINT /*nFlags*/, const CPoint point)
 {
-    if (m_pressedButton < 0) return;
+    if (m_pressedButton < 0 || m_pressedButton >= static_cast<int>(m_buttons.size())) return;
 
     ::ReleaseCapture();
-    const ActionButton* pressed = (m_pressedButton == 0 ? &m_btnRecycle : &m_btnDelete);
+    const ActionButton pressed = m_buttons[static_cast<size_t>(m_pressedButton)];
     m_pressedButton = -1;
     Invalidate(false);
 
-    if (pressed->enabled && pressed->rect.Contains(point))
+    if (!pressed.enabled || !pressed.rect.Contains(point)) return;
+
+    switch (pressed.command)
     {
-        GetMainWindow()->SendMessage(WM_COMMAND, pressed->command);
+    case CMD_MIGRATE:
+        OnMigrate();
+        break;
+    case CMD_SYSADVANCED:
+        ShellExecuteWrapper(L"SystemPropertiesAdvanced.exe", {}, {}, GetMainWindowHandle());
+        break;
+    case CMD_SYSPROTECT:
+        ShellExecuteWrapper(L"SystemPropertiesProtection.exe", {}, {}, GetMainWindowHandle());
+        break;
+    default:
+        GetMainWindow()->SendMessage(WM_COMMAND, pressed.command);
+        break;
     }
 }
