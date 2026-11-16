@@ -12,7 +12,7 @@
 #include "FileTabbedView.h"
 #include "FileTreeView.h"
 #include "DrawTextCache.h"
-#include "ExtensionView.h"
+#include "FileInfoView.h"
 #include "ProgressDlg.h"
 #include "RecoveryDlg.h"
 
@@ -302,7 +302,6 @@ void CMainFrame::MoveFocus(const LOGICAL_FOCUS logicalFocus)
 {
     switch (logicalFocus)
     {
-        case LF_EXTLIST: GetExtensionView()->SetFocus(); break;
         case LF_DUPELIST: GetFileDupeView()->SetFocus(); break;
         case LF_TOPLIST: GetFileTopView()->SetFocus(); break;
         case LF_SEARCHLIST: GetFileSearchView()->SetFocus(); break;
@@ -450,14 +449,7 @@ void CMainFrame::OnUpdateViewAbsolutePercentages(CCmdUI* pCmdUI)
 
 void CMainFrame::OnUpdateViewShowFileTypes(CCmdUI* pCmdUI) const
 {
-    pCmdUI->SetCheck(GetExtensionView()->IsShowTypes());
-}
-
-void CMainFrame::OnUpdateViewGroupUnregisteredTypes(CCmdUI* pCmdUI) const
-{
-    const CWinDirStatModel* model = CWinDirStatModel::Get();
-    pCmdUI->Enable(GetExtensionView()->IsShowTypes() && model->IsScanSettled());
-    pCmdUI->SetCheck(COptions::GroupUnregisteredTypes);
+    pCmdUI->SetCheck(GetFileInfoView()->IsPaneShown());
 }
 
 void CMainFrame::OnUpdateViewShowWatcher(CCmdUI* pCmdUI) const
@@ -602,20 +594,9 @@ void CMainFrame::OnViewAbsolutePercentages() const
 
 void CMainFrame::OnViewShowFileTypes()
 {
-    GetExtensionView()->ShowTypes(!GetExtensionView()->IsShowTypes());
-    COptions::ShowFileTypes = GetExtensionView()->IsShowTypes();
+    GetFileInfoView()->ShowPane(!GetFileInfoView()->IsPaneShown());
+    COptions::ShowFileTypes = GetFileInfoView()->IsPaneShown();
     ApplyPaneVisibility();
-}
-
-void CMainFrame::OnViewGroupUnregisteredTypes() const
-{
-    if (!CWinDirStatModel::Get()->IsScanSettled()) return;
-    COptions::GroupUnregisteredTypes = !COptions::GroupUnregisteredTypes;
-
-    // Recolor extensions so the unregistered group shares one color, then refresh the list and graph
-    CWinDirStatModel::Get()->RebuildExtensionData();
-    GetExtensionView()->OnUpdate(nullptr, MODEL_CHANGE_NONE, nullptr);
-    CWinDirStatModel::Get()->NotifyPanes(MODEL_CHANGE_TREEMAP_STYLE);
 }
 
 void CMainFrame::OnViewShowExtensionsOnTreeMap() const
@@ -1125,7 +1106,7 @@ void CMainFrame::BuildSplitterLayout()
     m_subSplitter.ClearPaneTracking();
 
     // Attach each stable view and its visibility action to the owning splitter.
-    const std::array<CWinDirStatPane*, 3> views{ GetFileTabbedView(), GetExtensionView(), GetVisualizationPane() };
+    const std::array<CWinDirStatPane*, 3> views{ GetFileTabbedView(), GetFileInfoView(), GetVisualizationPane() };
     for (const auto [slot, viewType] : std::views::enumerate(layout.views))
     {
         auto& splitter = slot == 0 ? m_splitter : m_subSplitter;
@@ -1140,7 +1121,7 @@ void CMainFrame::BuildSplitterLayout()
             if (viewType == VT_VISUALIZATION) ShowVisualization(visible);
             else
             {
-                GetExtensionView()->ShowTypes(visible);
+                GetFileInfoView()->ShowPane(visible);
                 COptions::ShowFileTypes = visible;
             }
         }, [this] { ApplyPaneVisibility(); });
@@ -1169,5 +1150,5 @@ void CMainFrame::RebuildLayout(const bool resetPositions)
     DarkMode::AdjustControls(Handle());
     GetFileTabbedView()->RedrawWindow();
     GetActiveVisualization()->RedrawWindow();
-    GetExtensionView()->RedrawWindow();
+    GetFileInfoView()->RedrawWindow();
 }

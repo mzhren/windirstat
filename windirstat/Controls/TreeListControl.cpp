@@ -625,7 +625,7 @@ void CTreeListControl::OnKeyDown(const UINT nChar, UINT /*nRepCnt*/, UINT /*nFla
     {
         if (nChar == VK_TAB)
         {
-            CMainFrame::Get()->MoveFocus(LF_EXTLIST);
+            CMainFrame::Get()->MoveFocus(LF_NONE);
             return;
         }
         if (nChar == VK_ESCAPE)

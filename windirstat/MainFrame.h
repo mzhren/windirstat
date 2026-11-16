@@ -16,7 +16,7 @@ class CWdsSplitterWnd;
 class CMainFrame;
 
 class CFileTreeView;
-class CExtensionView;
+class CFileInfoView;
 class CVisualizationPane;
 
 //
@@ -170,7 +170,7 @@ public:
 
     // The main panes; the splitters only arrange them
     std::unique_ptr<CFileTabbedView> m_fileTabbedView;
-    std::unique_ptr<CExtensionView> m_extensionView;
+    std::unique_ptr<CFileInfoView> m_fileInfoView;
     std::unique_ptr<CVisualizationPane> m_visualizationPane;
     CFileTreeView* GetFileTreeView() const { return m_fileTabbedView->GetFileTreeView(); }
     CFileTopView* GetFileTopView() const { return m_fileTabbedView->GetFileTopView(); }
@@ -179,7 +179,7 @@ public:
     CFileWatcherView* GetFileWatcherView() const { return m_fileTabbedView->GetFileWatcherView(); }
     CFilePermsView* GetFilePermsView() const { return m_fileTabbedView->GetFilePermsView(); }
     CFileTabbedView* GetFileTabbedView() const { return m_fileTabbedView.get(); }
-    CExtensionView* GetExtensionView() const { return m_extensionView.get(); }
+    CFileInfoView* GetFileInfoView() const { return m_fileInfoView.get(); }
     GraphPane GetGraphPaneType() const;
     void SelectGraphPane(GraphPane pane);
     void ShowVisualization(bool show) const;
@@ -274,7 +274,6 @@ protected:
     void OnUpdateTreeMapUsePhysical(CCmdUI* pCmdUI);
     void OnUpdateViewAbsolutePercentages(CCmdUI* pCmdUI);
     void OnUpdateViewShowFileTypes(CCmdUI* pCmdUI) const;
-    void OnUpdateViewGroupUnregisteredTypes(CCmdUI* pCmdUI) const;
     void OnUpdateViewShowWatcher(CCmdUI* pCmdUI) const;
     void OnViewShowVisualization();
     void OnViewTreeMapStyle(UINT commandId);
@@ -288,7 +287,6 @@ protected:
     void OnViewTreeMapSize(UINT commandId);
     void OnViewAbsolutePercentages() const;
     void OnViewShowFileTypes();
-    void OnViewGroupUnregisteredTypes() const;
     void OnViewShowExtensionsOnTreeMap() const;
     void OnUpdateViewShowExtensionsOnTreeMap(CCmdUI* pCmdUI) const;
     void OnViewShowFolderFramesOnTreeMap() const;
@@ -395,7 +393,6 @@ inline std::span<const RouteEntry> CMainFrame::Routes()
     {
         Route::Command<&OnConfigure>(ID_CONFIGURE),
         Route::Command<&OnViewShowFileTypes>(ID_VIEW_SHOWFILETYPES),
-        Route::Command<&OnViewGroupUnregisteredTypes>(ID_VIEW_GROUP_TYPES),
         Route::Command<&OnViewShowVisualization>(ID_VIEW_SHOWVISUALIZATION),
         Route::Command<&OnViewTreeMapStyle>(ID_VIEW_TREEMAP_ROWS, ID_VIEW_TREEMAP_MOORE),
         Route::Command<&OnViewGraphPreset>(ID_VIEW_GRAPH_PRESET_CLASSIC, ID_VIEW_GRAPH_PRESET_CUSTOM),
@@ -416,7 +413,6 @@ inline std::span<const RouteEntry> CMainFrame::Routes()
         Route::Update<&OnUpdateViewFlameGraph>(ID_VIEW_FLAMEGRAPH),
         Route::Update<&OnUpdateViewSunburst>(ID_VIEW_SUNBURST),
         Route::Update<&OnUpdateViewShowFileTypes>(ID_VIEW_SHOWFILETYPES),
-        Route::Update<&OnUpdateViewGroupUnregisteredTypes>(ID_VIEW_GROUP_TYPES),
         Route::Update<&OnUpdateTreeMapUseLogical>(ID_TREEMAP_LOGICAL_SIZE),
         Route::Update<&OnUpdateTreeMapUsePhysical>(ID_TREEMAP_PHYSICAL_SIZE),
         Route::Update<&OnUpdateViewAbsolutePercentages>(ID_VIEW_ABSOLUTE_PERCENTAGES),

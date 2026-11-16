@@ -8,7 +8,7 @@
 #include "VisualizationPane.h"
 #include "FileTabbedView.h"
 #include "FileTreeView.h"
-#include "ExtensionView.h"
+#include "FileInfoView.h"
 #include "PageAdvanced.h"
 #include "PageFiltering.h"
 #include "PageCleanups.h"
@@ -582,7 +582,7 @@ void CMainFrame::SavePersistentAttributes() const
 
     COptions::ShowToolBar = (m_wndToolBar.GetStyle() & WS_VISIBLE) != 0;
     COptions::ShowStatusBar = (m_wndStatusBar.GetStyle() & WS_VISIBLE) != 0;
-    COptions::ShowFileTypes = GetExtensionView()->IsShowTypes();
+    COptions::ShowFileTypes = GetFileInfoView()->IsPaneShown();
     COptions::ShowVisualization = IsVisualizationShown();
 }
 
@@ -608,15 +608,15 @@ bool CMainFrame::OnCreateClient()
     // Publish the views only once all of them exist.
     auto visualizationPane = std::make_unique<CVisualizationPane>();
     auto fileTabbedView = std::make_unique<CFileTabbedView>();
-    auto extensionView = std::make_unique<CExtensionView>();
-    for (CWnd* view : std::initializer_list<CWnd*>{ visualizationPane.get(), fileTabbedView.get(), extensionView.get() })
+    auto fileInfoView = std::make_unique<CFileInfoView>();
+    for (CWnd* view : std::initializer_list<CWnd*>{ visualizationPane.get(), fileTabbedView.get(), fileInfoView.get() })
         if (!view->Create(nullptr, nullptr, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS, CRect(), &m_splitter, 0))
             return false;
     m_visualizationPane = std::move(visualizationPane);
     m_fileTabbedView = std::move(fileTabbedView);
-    m_extensionView = std::move(extensionView);
+    m_fileInfoView = std::move(fileInfoView);
 
-    GetExtensionView()->ShowTypes(COptions::ShowFileTypes);
+    GetFileInfoView()->ShowPane(COptions::ShowFileTypes);
 
     m_layoutPopup.Create(this);
     RebuildLayout();
@@ -626,7 +626,7 @@ bool CMainFrame::OnCreateClient()
 void CMainFrame::UpdateAllPanes(CWnd* sender, const MODEL_CHANGE change, CItem* item) const
 {
     const std::array<CWinDirStatPane*, 3> panes{
-        m_fileTabbedView.get(), m_extensionView.get(), m_visualizationPane.get()
+        m_fileTabbedView.get(), m_fileInfoView.get(), m_visualizationPane.get()
     };
     for (CWinDirStatPane* pane : panes)
     {
@@ -701,9 +701,9 @@ void CMainFrame::ApplyPaneVisibility(const bool restoreDuringScan)
     }
 
     RestoreSplitterPositions();
-    const bool showFileTypes = GetExtensionView()->IsShowTypes();
+    const bool showFileInfo = GetFileInfoView()->IsPaneShown();
     const bool showVisualization = IsVisualizationShown();
-    if (!showFileTypes && !showVisualization)
+    if (!showFileInfo && !showVisualization)
     {
         ExpandFileTabbedView();
         return;
@@ -714,7 +714,7 @@ void CMainFrame::ApplyPaneVisibility(const bool restoreDuringScan)
         pane->GetParent<CWdsSplitterWnd>()->SetSplitterPos(
             pane->GetDlgCtrlID() == CSplitterWnd::PaneId(0) ? 0.0 : 1.0);
     };
-    if (!showFileTypes) collapse(GetExtensionView());
+    if (!showFileInfo) collapse(GetFileInfoView());
     if (!showVisualization) collapse(GetVisualizationPane());
 }
 

@@ -145,6 +145,9 @@
     <ClInclude Include="Views\ExtensionView.h">
       <Filter>Header Files\User Interface\Views</Filter>
     </ClInclude>
+    <ClInclude Include="Views\FileInfoView.h">
+      <Filter>Header Files\User Interface\Views</Filter>
+    </ClInclude>
     <ClInclude Include="Views\WinDirStatPane.h">
       <Filter>Header Files\User Interface\Views</Filter>
     </ClInclude>
@@ -424,6 +427,9 @@
       <Filter>Source Files\User Interface\Views</Filter>
     </ClCompile>
     <ClCompile Include="Views\ExtensionView.cpp">
+      <Filter>Source Files\User Interface\Views</Filter>
+    </ClCompile>
+    <ClCompile Include="Views\FileInfoView.cpp">
       <Filter>Source Files\User Interface\Views</Filter>
     </ClCompile>
     <ClCompile Include="Views\WinDirStatPane.cpp">

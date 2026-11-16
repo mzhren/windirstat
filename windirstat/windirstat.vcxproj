@@ -232,6 +232,7 @@ POWERSHELL.EXE -NoLogo -ExecutionPolicy Unrestricted -NoProfile -File "$(Project
     <ClInclude Include="resource.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Views\ExtensionView.h" />
+    <ClInclude Include="Views\FileInfoView.h" />
     <ClInclude Include="Views\WinDirStatPane.h" />
     <ClInclude Include="Views\GraphView.h" />
     <ClInclude Include="Views\VisualizationPane.h" />
@@ -338,6 +339,7 @@ POWERSHELL.EXE -NoLogo -ExecutionPolicy Unrestricted -NoProfile -File "$(Project
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Views\ExtensionView.cpp" />
+    <ClCompile Include="Views\FileInfoView.cpp" />
     <ClCompile Include="Views\WinDirStatPane.cpp" />
     <ClCompile Include="Views\GraphView.cpp" />
     <ClCompile Include="Views\VisualizationPane.cpp" />
