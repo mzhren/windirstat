@@ -13,6 +13,7 @@
 #include "FileTreeView.h"
 #include "DrawTextCache.h"
 #include "FileInfoView.h"
+#include "ExtensionView.h"
 #include "ProgressDlg.h"
 #include "RecoveryDlg.h"
 
@@ -302,6 +303,7 @@ void CMainFrame::MoveFocus(const LOGICAL_FOCUS logicalFocus)
 {
     switch (logicalFocus)
     {
+        case LF_EXTLIST: GetExtensionView()->SetFocus(); break;
         case LF_DUPELIST: GetFileDupeView()->SetFocus(); break;
         case LF_TOPLIST: GetFileTopView()->SetFocus(); break;
         case LF_SEARCHLIST: GetFileSearchView()->SetFocus(); break;
@@ -1097,35 +1099,45 @@ void CMainFrame::OnViewWindowLayout()
 
 void CMainFrame::BuildSplitterLayout()
 {
-    // The splitters persist; a layout only changes their orientations and the nested splitter's slot.
-    const auto& layout = CLayoutPopup::CurrentLayout();
-    m_splitter.SetOrientation(layout.orientation);
-    m_subSplitter.SetOrientation(layout.subOrientation);
-    SetWindowLongPtrW(m_subSplitter.Handle(), GWLP_ID, m_splitter.PaneId(layout.subPane));
+    // Fixed arrangement: the top region holds three columns — the file tree, the
+    // file info pane, and the extension list (6 : 4 : 2 by default) — and the
+    // visualization fills the rest of the window.
+    m_splitter.SetOrientation(CSplitterWnd::Orientation::Horizontal);
+    m_subSplitter.SetOrientation(CSplitterWnd::Orientation::Vertical);
+    m_innerSplitter.SetOrientation(CSplitterWnd::Orientation::Vertical);
+    SetWindowLongPtrW(m_subSplitter.Handle(), GWLP_ID, m_splitter.PaneId(0));
+    SetWindowLongPtrW(m_innerSplitter.Handle(), GWLP_ID, m_subSplitter.PaneId(1));
     m_splitter.ClearPaneTracking();
     m_subSplitter.ClearPaneTracking();
+    m_innerSplitter.ClearPaneTracking();
 
-    // Attach each stable view and its visibility action to the owning splitter.
-    const std::array<CWinDirStatPane*, 3> views{ GetFileTabbedView(), GetFileInfoView(), GetVisualizationPane() };
-    for (const auto [slot, viewType] : std::views::enumerate(layout.views))
+    struct Placement
     {
-        auto& splitter = slot == 0 ? m_splitter : m_subSplitter;
-        const int pane = slot == 0 ? 1 - layout.subPane : static_cast<int>(slot) - 1;
-        const HWND window = views[viewType]->Handle();
-        SetParent(window, splitter.Handle());
-        SetWindowLongPtrW(window, GWLP_ID, splitter.PaneId(pane));
-        if (viewType == VT_ALLFILES) continue;
-
-        splitter.TrackPane(pane, [this, viewType](const bool visible)
-        {
-            if (viewType == VT_VISUALIZATION) ShowVisualization(visible);
-            else
-            {
-                GetFileInfoView()->ShowPane(visible);
-                COptions::ShowFileTypes = visible;
-            }
-        }, [this] { ApplyPaneVisibility(); });
+        CWnd* window;
+        CWdsSplitterWnd* splitter;
+        int pane;
+    };
+    const std::array placements
+    {
+        Placement{ GetFileTabbedView(), &m_subSplitter, 0 },
+        Placement{ GetFileInfoView(), &m_innerSplitter, 0 },
+        Placement{ GetExtensionView(), &m_innerSplitter, 1 },
+        Placement{ GetVisualizationPane(), &m_splitter, 1 },
+    };
+    for (const auto& [window, splitter, pane] : placements)
+    {
+        const HWND handle = window->Handle();
+        SetParent(handle, splitter->Handle());
+        SetWindowLongPtrW(handle, GWLP_ID, splitter->PaneId(pane));
     }
+
+    m_splitter.TrackPane(1, [this](const bool visible) { ShowVisualization(visible); },
+        [this] { ApplyPaneVisibility(); });
+    m_innerSplitter.TrackPane(0, [this](const bool visible)
+    {
+        GetFileInfoView()->ShowPane(visible);
+        COptions::ShowFileTypes = visible;
+    }, [this] { ApplyPaneVisibility(); });
 }
 
 void CMainFrame::RebuildLayout(const bool resetPositions)
@@ -1139,6 +1151,7 @@ void CMainFrame::RebuildLayout(const bool resetPositions)
     BuildSplitterLayout();
     m_splitter.SetStorage(COptions::MainSplitterPos.Ptr());
     m_subSplitter.SetStorage(COptions::SubSplitterPos.Ptr());
+    m_innerSplitter.SetStorage(COptions::InnerSplitterPos.Ptr());
 
     // The reused splitters may keep their size, so lay out their reassigned panes explicitly.
     UpdateLayout();
@@ -1151,4 +1164,5 @@ void CMainFrame::RebuildLayout(const bool resetPositions)
     GetFileTabbedView()->RedrawWindow();
     GetActiveVisualization()->RedrawWindow();
     GetFileInfoView()->RedrawWindow();
+    GetExtensionView()->RedrawWindow();
 }

@@ -16,6 +16,7 @@ class CWdsSplitterWnd;
 class CMainFrame;
 
 class CFileTreeView;
+class CExtensionView;
 class CFileInfoView;
 class CVisualizationPane;
 
@@ -171,6 +172,7 @@ public:
     // The main panes; the splitters only arrange them
     std::unique_ptr<CFileTabbedView> m_fileTabbedView;
     std::unique_ptr<CFileInfoView> m_fileInfoView;
+    std::unique_ptr<CExtensionView> m_extensionView;
     std::unique_ptr<CVisualizationPane> m_visualizationPane;
     CFileTreeView* GetFileTreeView() const { return m_fileTabbedView->GetFileTreeView(); }
     CFileTopView* GetFileTopView() const { return m_fileTabbedView->GetFileTopView(); }
@@ -180,6 +182,7 @@ public:
     CFilePermsView* GetFilePermsView() const { return m_fileTabbedView->GetFilePermsView(); }
     CFileTabbedView* GetFileTabbedView() const { return m_fileTabbedView.get(); }
     CFileInfoView* GetFileInfoView() const { return m_fileInfoView.get(); }
+    CExtensionView* GetExtensionView() const { return m_extensionView.get(); }
     GraphPane GetGraphPaneType() const;
     void SelectGraphPane(GraphPane pane);
     void ShowVisualization(bool show) const;
@@ -225,7 +228,8 @@ public:
     ULONGLONG m_progressPos = 0;    // Progress position (<= progressRange, or an item count when m_progressRange == 0)
     CItem* m_workingItem = nullptr;
 
-    CWdsSplitterWnd m_subSplitter{ COptions::SubSplitterPos.Ptr() }; // Nested splitter holding two of the panes
+    CWdsSplitterWnd m_subSplitter{ COptions::SubSplitterPos.Ptr() }; // Nested splitter holding the file tree and the info panes
+    CWdsSplitterWnd m_innerSplitter{ COptions::InnerSplitterPos.Ptr() }; // Innermost splitter holding the info and extension panes
     CWdsSplitterWnd m_splitter{ COptions::MainSplitterPos.Ptr() };    // Holds the nested splitter and the remaining pane
     CLayoutPopup m_layoutPopup;                                        // Floating layout-picker popup
 

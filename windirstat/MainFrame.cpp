@@ -9,6 +9,7 @@
 #include "FileTabbedView.h"
 #include "FileTreeView.h"
 #include "FileInfoView.h"
+#include "ExtensionView.h"
 #include "PageAdvanced.h"
 #include "PageFiltering.h"
 #include "PageCleanups.h"
@@ -603,18 +604,21 @@ bool CMainFrame::OnCreateClient()
 {
     // The splitters and views persist; RebuildLayout arranges the views for the selected layout.
     if (!m_splitter.CreateStatic(this, CSplitterWnd::Orientation::Horizontal) ||
-        !m_subSplitter.CreateStatic(&m_splitter, CSplitterWnd::Orientation::Vertical)) return false;
+        !m_subSplitter.CreateStatic(&m_splitter, CSplitterWnd::Orientation::Vertical) ||
+        !m_innerSplitter.CreateStatic(&m_subSplitter, CSplitterWnd::Orientation::Vertical)) return false;
 
     // Publish the views only once all of them exist.
     auto visualizationPane = std::make_unique<CVisualizationPane>();
     auto fileTabbedView = std::make_unique<CFileTabbedView>();
     auto fileInfoView = std::make_unique<CFileInfoView>();
-    for (CWnd* view : std::initializer_list<CWnd*>{ visualizationPane.get(), fileTabbedView.get(), fileInfoView.get() })
+    auto extensionView = std::make_unique<CExtensionView>();
+    for (CWnd* view : std::initializer_list<CWnd*>{ visualizationPane.get(), fileTabbedView.get(), fileInfoView.get(), extensionView.get() })
         if (!view->Create(nullptr, nullptr, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS, CRect(), &m_splitter, 0))
             return false;
     m_visualizationPane = std::move(visualizationPane);
     m_fileTabbedView = std::move(fileTabbedView);
     m_fileInfoView = std::move(fileInfoView);
+    m_extensionView = std::move(extensionView);
 
     GetFileInfoView()->ShowPane(COptions::ShowFileTypes);
 
@@ -625,8 +629,8 @@ bool CMainFrame::OnCreateClient()
 
 void CMainFrame::UpdateAllPanes(CWnd* sender, const MODEL_CHANGE change, CItem* item) const
 {
-    const std::array<CWinDirStatPane*, 3> panes{
-        m_fileTabbedView.get(), m_fileInfoView.get(), m_visualizationPane.get()
+    const std::array<CWinDirStatPane*, 4> panes{
+        m_fileTabbedView.get(), m_fileInfoView.get(), m_extensionView.get(), m_visualizationPane.get()
     };
     for (CWinDirStatPane* pane : panes)
     {
@@ -690,6 +694,7 @@ void CMainFrame::RestoreSplitterPositions()
     const auto& layout = CLayoutPopup::CurrentLayout();
     m_splitter.RestoreSplitterPos(layout.ratio);
     m_subSplitter.RestoreSplitterPos(layout.subRatio);
+    m_innerSplitter.RestoreSplitterPos(2.0 / 3.0); // file info : extension = 4 : 2
 }
 
 void CMainFrame::ApplyPaneVisibility(const bool restoreDuringScan)

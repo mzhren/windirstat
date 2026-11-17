@@ -217,7 +217,7 @@ bool CFileTabbedView::PreprocessMessage(MSG* pMsg)
     {
         if (!CycleTab(!IsKeyDown(VK_SHIFT)))
         {
-            CMainFrame::Get()->MoveFocus(LF_NONE);
+            CMainFrame::Get()->MoveFocus(LF_EXTLIST);
         }
         return true;
     }

@@ -16,30 +16,8 @@ const std::array<CLayoutPopup::LayoutDef, LayoutCount> CLayoutPopup::LAYOUTS = [
 {
     using enum CSplitterWnd::Orientation;
     return std::to_array<LayoutDef>({
-        // [AF|FT] above visualization
-        { Horizontal, Vertical, 0, { VT_VISUALIZATION, VT_ALLFILES, VT_FILETYPES }, 0.5, 0.75, 0.5f, 0.58f },
-        // AF | [FT|visualization]
-        { Vertical, Vertical, 1, { VT_ALLFILES, VT_FILETYPES, VT_VISUALIZATION }, 0.4, 1.0 / 3.0, 0.4f, 1.0f / 3.0f },
-        // [visualization|AF] | FT
-        { Vertical, Vertical, 0, { VT_FILETYPES, VT_VISUALIZATION, VT_ALLFILES }, 0.8, 0.5, 0.8f, 0.5f },
-        // Visualization above [AF|FT]
-        { Horizontal, Vertical, 1, { VT_VISUALIZATION, VT_ALLFILES, VT_FILETYPES }, 0.5, 0.75, 0.5f, 0.58f },
-        // [AF|visualization] | FT
-        { Vertical, Vertical, 0, { VT_FILETYPES, VT_ALLFILES, VT_VISUALIZATION }, 0.8, 0.5, 0.8f, 0.5f },
-        // Visualization | [FT|AF]
-        { Vertical, Vertical, 1, { VT_VISUALIZATION, VT_FILETYPES, VT_ALLFILES }, 0.4, 1.0 / 3.0, 0.4f, 1.0f / 3.0f },
-        // [AF/visualization] | FT
-        { Vertical, Horizontal, 0, { VT_FILETYPES, VT_ALLFILES, VT_VISUALIZATION }, 0.75, 0.5, 0.6f, 0.5f },
-        // [AF/FT] | visualization
-        { Vertical, Horizontal, 0, { VT_VISUALIZATION, VT_ALLFILES, VT_FILETYPES }, 0.5, 0.5, 0.5f, 0.5f },
-        // Visualization | [AF/FT]
-        { Vertical, Horizontal, 1, { VT_VISUALIZATION, VT_ALLFILES, VT_FILETYPES }, 0.5, 0.5, 0.5f, 0.5f },
-        // [visualization/AF] | FT
-        { Vertical, Horizontal, 0, { VT_FILETYPES, VT_VISUALIZATION, VT_ALLFILES }, 0.75, 0.5, 0.6f, 0.5f },
-        // [FT/AF] | visualization
-        { Vertical, Horizontal, 0, { VT_VISUALIZATION, VT_FILETYPES, VT_ALLFILES }, 0.5, 0.5, 0.5f, 0.5f },
-        // Visualization | [FT/AF]
-        { Vertical, Horizontal, 1, { VT_VISUALIZATION, VT_FILETYPES, VT_ALLFILES }, 0.5, 0.5, 0.5f, 0.5f },
+        // [AF | (FI | FT)] above visualization, columns 6 : 4 : 2
+        { Horizontal, Vertical, 0, { VT_VISUALIZATION, VT_ALLFILES, VT_FILETYPES }, 0.5, 0.5, 0.5f, 0.67f },
     });
 }();
 

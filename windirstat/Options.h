@@ -77,7 +77,7 @@ enum LAYOUT_VIEW_TYPE : char
 };
 
 // Window layouts offered by the layout popup; the persisted value is the card index.
-constexpr int LayoutCount = 12;
+constexpr int LayoutCount = 1;
 
 struct USERDEFINEDCLEANUP
 {
@@ -292,6 +292,7 @@ public:
     inline static Setting<std::wstring> PermsExcludeRegex{ OptionsPerms, L"ExcludeRegex", L"" };
     inline static Setting<double> MainSplitterPos{ OptionsGeneral, L"MainSplitterPos", -1.0, 0.0, 1.0 };
     inline static Setting<double> SubSplitterPos{ OptionsGeneral, L"SubSplitterPos", -1.0, 0.0, 1.0 };
+    inline static Setting<double> InnerSplitterPos{ OptionsGeneral, L"InnerSplitterPos", -1.0, 0.0, 1.0 };
     inline static Setting<int> ConfigPage{ OptionsGeneral, L"ConfigPage", 0 };
     inline static Setting<int> UserDefinedCleanupCount{ OptionsCleanups, L"Count", 0, 0, std::numeric_limits<int>::max() };
     inline static Setting<int> DarkMode{ OptionsGeneral, L"DarkMode", DM_USE_WINDOWS, DM_DISABLED, DM_USE_WINDOWS };

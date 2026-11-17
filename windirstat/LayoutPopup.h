@@ -32,7 +32,10 @@ public:
 
     static const std::array<LayoutDef, LayoutCount> LAYOUTS;
 
-    static const LayoutDef& CurrentLayout() { return LAYOUTS[COptions::WindowLayout]; }
+    static const LayoutDef& CurrentLayout()
+    {
+        return LAYOUTS[std::clamp(COptions::WindowLayout.Obj(), 0, LayoutCount - 1)];
+    }
     bool Create(CWnd* parent);
     void ShowAtButton(const CRect& buttonScreenRect);
     void DismissPopup(bool cancel = false, bool resetPositions = false);
