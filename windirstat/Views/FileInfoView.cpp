@@ -753,11 +753,15 @@ void CFileInfoView::DrawButton(CDC* pdc, const ActionButton& button,
         hover || pressed ? accentColor : frameColor;
     const COLORREF text = button.enabled ? (button.primary ? accentTextColor : textColor) : disabledColor;
 
-    pdc->FillSolidRect(button.rect, fill);
-    pdc->FillSolidRect(button.rect.left, button.rect.top, button.rect.Width(), 1, border);
-    pdc->FillSolidRect(button.rect.left, button.rect.bottom - 1, button.rect.Width(), 1, border);
-    pdc->FillSolidRect(button.rect.left, button.rect.top, 1, button.rect.Height(), border);
-    pdc->FillSolidRect(button.rect.right - 1, button.rect.top, 1, button.rect.Height(), border);
+    // Rounded body and border, drawn like the proportion bars in the file tree
+    pdc->SetDCBrushColor(fill);
+    pdc->SetDCPenColor(border);
+    {
+        const StockObjectSelection brushSelection(pdc, DC_BRUSH);
+        const StockObjectSelection penSelection(pdc, DC_PEN);
+        const int radius = std::min(ScaleForDpi(6), button.rect.Height() / 2 - 1);
+        pdc->RoundRect(button.rect, CPoint(radius, radius));
+    }
 
     pdc->SetTextColor(text);
     CRect rcText = button.rect;
