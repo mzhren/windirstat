@@ -29,7 +29,7 @@ bool CProgressDlg::OnInitDialog()
     m_cancelButton.SubclassDlgItem(IDCANCEL, this);
 
     // Set window title and message
-    SetText(wds::strWinDirStat);
+    SetText(wds::strAppName);
     m_messageCtrl.SetText(m_message);
 
     // Configure cancel button

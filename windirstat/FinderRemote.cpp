@@ -100,7 +100,7 @@ public:
         // Follow the user's proxy configuration and current TLS versions wherever the system offers them.
         for (const DWORD access : { WINHTTP_ACCESS_TYPE_AUTOMATIC_PROXY, WINHTTP_ACCESS_TYPE_DEFAULT_PROXY })
         {
-            m_session = WinHttpOpen(L"WinDirStat", access, WINHTTP_NO_PROXY_NAME, WINHTTP_NO_PROXY_BYPASS,
+            m_session = WinHttpOpen(wds::strShellKey, access, WINHTTP_NO_PROXY_NAME, WINHTTP_NO_PROXY_BYPASS,
                 WINHTTP_FLAG_ASYNC);
             if (m_session != nullptr) break;
         }

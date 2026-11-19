@@ -35,10 +35,11 @@ void CAboutDlg::WdsTabControl::Initialize()
     m_monoFont.Create(ScaleForDpi(12), FW_DONTCARE, wds::strFontLucidaConsole, OUT_OUTLINE_PRECIS,
         CLEARTYPE_NATURAL_QUALITY, FF_MODERN);
 
-    // Populate text
-    m_textAbout.SetText(Localization::Format(IDS_ABOUT_ABOUT_TEXTss,
+    // Populate text, leading with the application slogan
+    m_textAbout.SetText(std::format(L"{}\n{}", wds::strSlogan,
+        Localization::Format(IDS_ABOUT_ABOUT_TEXTss,
         Localization::LookupNeutral(IDS_AUTHOR_EMAIL),
-        Localization::LookupNeutral(IDS_URL_WEBSITE)).c_str());
+        Localization::LookupNeutral(IDS_URL_WEBSITE))).c_str());
 
     m_textThanks.SetText(Localization::Lookup(IDS_ABOUT_THANKS_TEXT));
 

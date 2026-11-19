@@ -1,5 +1,5 @@
-@ECHO OFF
-TITLE Installing WinDirStat Build Prerequisites
+﻿@ECHO OFF
+TITLE Installing DiskSeek Build Prerequisites
 SETLOCAL EnableExtensions EnableDelayedExpansion
 
 NET SESSION >NUL 2>NUL
@@ -103,6 +103,6 @@ FOR %%E IN (WixToolset.UI.wixext WixToolset.Util.wixext) DO (
 )
 
 ECHO.
-ECHO WinDirStat build prerequisites are installed.
+ECHO DiskSeek build prerequisites are installed.
 ECHO If this is a new shell, reopen it so PATH changes are visible.
 EXIT /B 0

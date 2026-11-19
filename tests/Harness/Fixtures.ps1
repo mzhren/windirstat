@@ -116,7 +116,7 @@ function New-TestRunner {
     param([System.Collections.IDictionary] $Settings = @{}, [string[]] $LanguageLines = @())
     $folder = Join-Path $script:Context.Root ('app-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
     [IO.Directory]::CreateDirectory($folder) | Out-Null
-    $exe = Join-Path $folder 'WinDirStat.exe'
+    $exe = Join-Path $folder 'DiskSeek.exe'
     Copy-Item -LiteralPath $ExePath -Destination $exe
     $language = Join-Path ([IO.Path]::GetDirectoryName($ExePath)) 'lang_combined.bin'
     if (Test-Path -LiteralPath $language) { Copy-Item -LiteralPath $language -Destination $folder }
@@ -252,7 +252,7 @@ function Read-ScanReport {
 
 function Get-ReportFiles {
     param([object[]] $Rows)
-    return @($Rows | Where-Object { ([Convert]::ToUInt32($_.'WinDirStat Attributes', 16) -band 8) -ne 0 })
+    return @($Rows | Where-Object { ([Convert]::ToUInt32($_.'盘寻 Attributes', 16) -band 8) -ne 0 })
 }
 
 function Assert-ScanSnapshot {
@@ -260,7 +260,7 @@ function Assert-ScanSnapshot {
     Assert-True ($Rows.Count -gt 0) 'A scan report contains its root'
     $rootPath = Get-NormalPath $Root
     $realRows = @($Rows | Where-Object {
-        ([Convert]::ToUInt32($_.'WinDirStat Attributes', 16) -band 15) -ne 0
+        ([Convert]::ToUInt32($_.'盘寻 Attributes', 16) -band 15) -ne 0
     })
     $paths = @($realRows | ForEach-Object { Get-NormalPath $_.Name } | Sort-Object)
     $expectedPaths = @(@($rootPath) + @($Snapshot | ForEach-Object Path) | Sort-Object)
@@ -278,7 +278,7 @@ function Assert-ScanSnapshot {
         }
         if ($path -eq $rootPath -or ($disk.Count -and $disk[0].Directory)) {
             if ($path -ne $rootPath) {
-                Assert-Equal ([Convert]::ToUInt32($row.'WinDirStat Attributes', 16) -band 15) 4 `
+                Assert-Equal ([Convert]::ToUInt32($row.'盘寻 Attributes', 16) -band 15) 4 `
                     "A directory retains its item type for $path"
             }
             $descendants = @($Snapshot | Where-Object {
@@ -297,7 +297,7 @@ function Assert-ScanSnapshot {
             }
             continue
         }
-        Assert-Equal ([Convert]::ToUInt32($row.'WinDirStat Attributes', 16) -band 15) 8 `
+        Assert-Equal ([Convert]::ToUInt32($row.'盘寻 Attributes', 16) -band 15) 8 `
             "A file retains its item type for $path"
         Assert-Equal ([long]$row.'Logical Size') $disk[0].Logical "Logical bytes match disk for $path"
         if (-not $disk[0].Link) {

@@ -27,8 +27,8 @@
             </requestedPrivileges>
         </security>
     </trustInfo>
-    <assemblyIdentity version="1.0.0.0" processorArchitecture="*" name="net.windirstat.wds" type="win32" />
-    <description>WinDirStat - Windows Directory Statistics</description>
+    <assemblyIdentity version="1.0.0.0" processorArchitecture="*" name="space.diskseek.app" type="win32" />
+    <description>盘寻 (diskseek.space) - 磁盘空间统计</description>
     <dependency>
         <dependentAssembly>
             <assemblyIdentity

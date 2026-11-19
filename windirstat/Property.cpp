@@ -24,7 +24,7 @@ public:
 private:
     static std::wstring RegistryPath(const std::wstring& section)
     {
-        return L"Software\\WinDirStat\\WinDirStat\\" + section;
+        return std::wstring(wds::strSettingsKey) + L"\\" + section;
     }
 
     std::optional<std::wstring> m_iniPath;

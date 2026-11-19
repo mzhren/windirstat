@@ -525,7 +525,7 @@ void CWinDirStatModel::OnCommandPromptHere()
     {
         // If using command prompt, use pushd to force a drive mount
         std::wstring uncmod = path.starts_with(L"\\\\") ? std::format(L"&& PUSHD \"{}\" && CLS", path) : L"";
-        std::wstring params = std::format(L"/K TITLE {} - \"{}\" {}", wds::strWinDirStat, path, uncmod);
+        std::wstring params = std::format(L"/K TITLE {} - \"{}\" {}", wds::strAppName, path, uncmod);
 
         // Launch command prompt
         ShellExecuteWrapper(cmd, params, L"open", GetMainWindowHandle(), path);
@@ -856,7 +856,7 @@ void CWinDirStatModel::OnComputeHash()
     if (!hashResult.empty())
     {
         // Display result in message box
-        CMessageBoxDlg dlg(hashResult, wds::strWinDirStat, MB_OK | MB_ICONINFORMATION);
+        CMessageBoxDlg dlg(hashResult, wds::strAppName, MB_OK | MB_ICONINFORMATION);
         dlg.SetWidthAuto();
         dlg.ShowModal();
     }

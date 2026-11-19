@@ -1,118 +1,78 @@
-# WinDirStat - Windows Directory Statistics
+# 盘寻 DiskSeek（diskseek.space）
 
-## Description
+> **盘寻一下，空间回来。**
 
-WinDirStat is a disk usage analyzer and cleanup assistant for Microsoft Windows. Scan drives, folders, network shares, connected MTP devices, S3-compatible storage, Azure Blob Storage, or WebDAV collections, then explore usage through sortable file lists, file-type statistics, and interactive treemaps, sunbursts, or flame graphs.
+盘寻（DiskSeek）是一款 Windows 磁盘空间分析与清理助手，基于开源项目 WinDirStat 二次开发。支持扫描本地磁盘、文件夹、网络共享、MTP 设备、S3 兼容存储、Azure Blob Storage 与 WebDAV，并通过可排序的文件列表、文件类型统计以及交互式矩形树图（treemap）、旭日图、火焰图查看空间占用。
 
-Find large or duplicate files, inspect permissions, estimate storage costs, export reports, and run cleanup or deleted-file recovery tools. See the [website](https://windirstat.net/) for an overview and the [user guide](https://github.com/windirstat/windirstat/wiki) for usage details.
+快速找到大文件与重复文件、查看权限、估算存储成本、导出报告，并使用清理或已删除文件恢复工具。访问[官网](https://diskseek.space/)了解概览，或查阅[用户手册](https://github.com/windirstat/windirstat/wiki)获取使用细节。
 
-### Major features
+## 主要特性
 
-* Scan multiple drives or folders together, with pause/resume, refresh, and accelerated local NTFS scanning when elevated
-* Inspect cloud storage through metadata listings, with saved connections, logical-size totals, and explicit incomplete-scan indicators
-* Explore largest files, file types, logical versus physical size, hardlinks, and free/unknown space with configurable visualizations
-* Search scanned results by name, size, file/folder type, or owner; filter scans by path, name, size, or age, with regular-expression support
-* Detect duplicates using configurable hashes and cloud-file safeguards; optional sparse hashing labels sampled matches as **Probable duplicates**
-* Inspect file and folder permission entries and estimate storage tier costs by file modification age
-* Watch file-system changes, save/load scans as CSV or JSON, and export scan, duplicate, or permission reports from the command line
-* [Recover deleted files](https://github.com/windirstat/windirstat/wiki/Recovering-Files) from local NTFS, exFAT, and FAT drives with administrator access; recovery depends on surviving metadata and file data
-* Open, move, or delete files; run Windows cleanup tools, NTFS compression, hardlink deduplication, and custom cleanup commands
-* Customize layouts, columns, colors, fonts, and toolbar size, with dark mode, portable settings, translations, and Explorer integration
+* 多磁盘/多目录同时扫描，支持暂停/继续、刷新，提权后可加速本地 NTFS 扫描
+* 通过元数据列出云端存储内容，支持保存连接、逻辑大小合计与未完成扫描标记
+* 以可配置的可视化方式浏览最大文件、文件类型、逻辑/物理大小、硬链接与空闲空间
+* 按名称、大小、文件/目录类型或所有者搜索扫描结果；支持正则的路径/名称/大小/时间过滤
+* 使用可配置哈希检测重复文件，并带云端文件保护；可选抽样哈希标记“疑似重复”
+* 查看文件与目录权限条目，按修改时间估算存储分层成本
+* 监视文件系统变化，扫描结果可保存/加载为 CSV 或 JSON，命令行可导出扫描、重复、权限报告
+* 提权后可从本地 NTFS、exFAT、FAT 磁盘[恢复已删除文件](https://github.com/windirstat/windirstat/wiki/Recovering-Files)；恢复效果取决于元数据与文件数据是否幸存
+* 打开、移动、删除文件；调用 Windows 清理工具、NTFS 压缩、硬链接去重与自定义清理命令
+* 自定义布局、列、颜色、字体与工具栏大小；支持深色模式、便携设置、多语言与资源管理器集成
 
-For changes in recent versions, please check out [the change log](CHANGELOG.md).
+各版本变更请查看[更新日志](CHANGELOG.md)。
 
-### Getting started
+## 快速上手
 
-1. Choose drives or **Individual Folders** in **Select Drives**. Use the add-folder button to scan several folders together. Connected MTP devices appear under **Individual Drives**. For cloud storage, use **File > Select Cloud Storage** and add or select a connection.
-2. Enable **Scan for duplicate files** only when needed; hashing adds file reads. Direct cloud scans list metadata without downloading file contents and do not perform duplicate detection. For accelerated full-drive NTFS scans, use **File > Run Elevated**.
-3. Sort **All Files** or open **Largest Files**, select an item to locate it in the visualization, and use `Ctrl+F` to search. Right-click column headers to choose details and use **View** to switch graphs.
-4. Review items in Explorer before cleanup, then refresh affected results. Use **File > Save Results To CSV/JSON** to keep a scan snapshot.
+1. 在“选择磁盘”中选择磁盘或**单个文件夹**，可点击添加文件夹按钮同时扫描多个目录；MTP 设备出现在**单个磁盘**下；云存储请使用 **文件 > 选择云存储** 并添加连接。
+2. 仅在需要时勾选**扫描重复文件**（哈希会增加磁盘读取）。直接云扫描只列出元数据、不下载文件内容，也不做重复检测。需要加速整盘 NTFS 扫描请使用 **文件 > 以管理员身份运行**。
+3. 对**所有文件**排序或打开**最大文件**，选中项目可在可视化中定位，使用 `Ctrl+F` 搜索；右键列标题可选择显示的细节，使用 **视图** 切换图形。
+4. 清理前先在资源管理器中确认内容，之后刷新受影响的结果；使用 **文件 > 保存结果到 CSV/JSON** 保留扫描快照。
 
-For scripting, use `/SaveTo`, `/SaveDupesTo`, or `/SavePermsTo` followed by an output filename and scan targets. Save modes write a report and exit; `/LoadFrom` reopens a saved scan. See [command-line examples and export formats](https://github.com/windirstat/windirstat/wiki/Command-Line-and-CSV).
+脚本调用可使用 `/SaveTo`、`/SaveDupesTo`、`/SavePermsTo` 加输出文件名与扫描目标；保存模式写出报告后退出，`/LoadFrom` 重新打开已保存的扫描。命令行示例与导出格式见[文档](https://github.com/windirstat/windirstat/wiki/Command-Line-and-CSV)。
 
-An incomplete scan retains the items already found and marks affected branches. Save modes return a nonzero exit code when scanning is incomplete, even if a report was written. Cloud physical allocation is unknown and appears blank; use logical size to compare cloud content.
+未完成的扫描会保留已发现的项目并标记受影响的分支。保存模式在扫描不完整时返回非零退出码（即使报告已写出）。云端的物理占用未知并显示为空白，比较云内容请使用逻辑大小。
 
-### Installation
+## 安装
 
-The recommended way to install WinDirStat is with a package manager, which also makes future updates easier:
+从 [GitHub Releases](https://github.com/windirstat/windirstat/releases/) 下载安装包或便携版：
 
-* Install from the [Microsoft Store](https://apps.microsoft.com/detail/9ph1gl95p3wf) for Store-managed installation and updates
-* Install with `winget install -e --id WinDirStat.WinDirStat` (or use `winget upgrade` later)
-* Install with `choco install windirstat` (or use `choco upgrade windirstat` later)
-* Install with `scoop install extras/windirstat` (requires `scoop bucket add extras`)
-
-If you prefer a manual installer, need a portable archive, or want to browse older versions and beta builds, use the [GitHub releases page](https://github.com/windirstat/windirstat/releases/). If you are not sure which file to choose, download the **64-bit MSI installer**.
-
-| Download | Best for | What is inside |
+| 下载 | 适用场景 | 说明 |
 | --- | --- | --- |
-| [Microsoft Store app](https://apps.microsoft.com/detail/9ph1gl95p3wf) | Users who want one-click installation and Store-managed updates | Installs WinDirStat through the Microsoft Store app experience on supported Windows systems. |
-| [WinDirStat-x64.msi](https://github.com/windirstat/windirstat/releases/latest/download/WinDirStat-x64.msi) | Most users on modern Intel or AMD 64-bit Windows PCs | Standard Windows installer for 64-bit systems. Adds WinDirStat to the Start menu and installs it like a normal app. |
-| [WinDirStat-arm64.msi](https://github.com/windirstat/windirstat/releases/latest/download/WinDirStat-arm64.msi) | Windows on ARM devices, including newer Surface devices and other Snapdragon-based laptops | Standard Windows installer built for ARM64 Windows. |
-| [WinDirStat-x86.msi](https://github.com/windirstat/windirstat/releases/latest/download/WinDirStat-x86.msi) | Older 32-bit Windows installations | Standard Windows installer for 32-bit systems. |
-| [MSIX bundle](https://github.com/windirstat/windirstat/releases/latest) | Windows App Installer or Store-style deployment across different CPU types | If the release includes an `.msixbundle` asset, it can contain packages for multiple CPU types and Windows chooses the right package for your device. |
-| [WinDirStat.zip](https://github.com/windirstat/windirstat/releases/latest/download/WinDirStat.zip) | Portable use, testing, or running without an installer | Zip archive containing the WinDirStat executables. Extract it first, then run the executable for your CPU type. |
-| [WinDirStat.7z](https://github.com/windirstat/windirstat/releases/latest/download/WinDirStat.7z) | Portable use when you already have 7-Zip installed | Same kind of portable executable archive as the zip file, usually with a smaller download size. |
+| DiskSeek-x64.msi | 现代 64 位 Windows | 标准 Windows 安装器，加入开始菜单 |
+| DiskSeek-arm64.msi | Windows on ARM 设备 | ARM64 架构安装器 |
+| DiskSeek-x86.msi | 32 位 Windows | 32 位架构安装器 |
+| DiskSeek.zip / DiskSeek.7z | 便携使用、免安装 | 解压后直接运行对应架构的可执行文件 |
 
-Running from an archive does not automatically enable portable settings. Enable **Options > Settings > General > Run in portable mode**, or rename the executable to `WinDirStat-portable.exe` to force local settings in a matching `.ini` file beside it. A forced portable executable keeps using that file on read-only media, but cannot save preference changes there. Remembered cloud credentials use Windows Credential Manager and do not travel with the INI file.
+从压缩包运行不会自动启用便携设置。请启用 **选项 > 设置 > 常规 > 以便携模式运行**，或将可执行文件重命名为 `DiskSeek-portable.exe` 以在旁侧同名 `.ini` 文件中保存本地设置。云端凭据保存在 Windows 凭据管理器中，不会随 INI 文件一起迁移。
 
-## Copyright / Licenses
+## 版权 / 许可证
 
-* Copyright © WinDirStat Team ([windirstat.net](https://windirstat.net/))
+* Copyright © WinDirStat Team（[windirstat.net](https://windirstat.net/)）
+* Copyright © diskseek.space
 
-The application itself is distributed under the terms of the [GPL v3 or later](windirstat/res/license.txt), but parts of the source code are also available under more lenient license terms.
+应用本体依据 [GPL v3 或更新版本](windirstat/res/license.txt) 分发；部分源代码采用更宽松的许可条款。徽标及其衍生作品依据 [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/) 许可。
 
-The logo and all derivatives are available under the terms of the Creative
-Commons license [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/).
+盘寻是 WinDirStat 的衍生项目，感谢 WinDirStat Team 以及 KDirStat、SequoiaView 等前辈项目的贡献。
 
-## Compatibility
+## 兼容性
 
-The desktop executable supports the following operating systems. Store/MSIX packages require Windows 10 version 1809 or later; choose an MSI installer or portable archive for older supported systems.
+桌面版可执行文件支持以下操作系统。Store/MSIX 包要求 Windows 10 1809 或更高；更早的系统请选择 MSI 安装器或便携压缩包。
 
-* Windows 7
-* Windows 8
-* Windows 8.1
-* Windows 10
-* Windows 11
-* Windows Server 2008 R2
-* Windows Server 2012
-* Windows Server 2012 R2
-* Windows Server 2016
-* Windows Server 2019
-* Windows Server 2022
-* Windows Server 2025
+* Windows 7 / 8 / 8.1 / 10 / 11
+* Windows Server 2008 R2 至 Windows Server 2025
 
-## Resources
+## 构建
 
-* A [website](https://windirstat.net/)
-* The [user guide and reference](https://github.com/windirstat/windirstat/wiki)
-* A [blog](https://blog.windirstat.net/)
-* Twitter/X as [@windirstat](https://x.com/windirstat)
-* SubReddit [r/WinDirStat](https://www.reddit.com/r/WinDirStat/)
+在 Visual Studio 中打开 `windirstat.sln`，需安装“使用 C++ 的桌面开发”工作负载、MSVC v145 工具集（含 C++23 支持）、ATL 与 Windows SDK。按需安装 x64、Win32 或 ARM64 的编译工具；构建脚本依赖 Git 与 Windows PowerShell，首次构建会自动下载 xxHash。
 
-Find a more up-to-date list of resources on the website and the blog at any point in time.
+## 贡献
 
-## Official Downloads and Malware Warning
-
-WinDirStat's popularity has led to unofficial websites that copy the project's name, branding, or downloads. These sites are not operated by the WinDirStat team, may offer outdated or modified files, and may expose users to malware.
-
-For your safety, install WinDirStat only through the Microsoft Store link and package managers listed above, the official [GitHub releases](https://github.com/windirstat/windirstat/releases/), or links from [windirstat.net](https://windirstat.net/). The team reports impersonation sites when possible, but takedowns are not always successful.
-
-## Building
-
-Open `windirstat.sln` in Visual Studio with the C++ desktop workload, MSVC v145 toolset with C++23 support, ATL, and a Windows SDK. Install the compiler tools for each architecture you build: x64, Win32, or ARM64. Git and Windows PowerShell are required by the build scripts; the first build downloads xxHash if it is absent.
-
-## Contributors
-
-You can contribute by responding to issues, [developing](https://github.com/windirstat/windirstat/wiki/Developers) source code, or developing [translations](https://github.com/windirstat/windirstat/wiki/Contribute-Translation).
-
-Thank you to everyone who has helped shape WinDirStat over the years.
+欢迎通过回复 issue、[开发源代码](https://github.com/windirstat/windirstat/wiki/Developers)或[翻译](https://github.com/windirstat/windirstat/wiki/Contribute-Translation)参与贡献。历史贡献者、测试者与译者名单见[贡献者页面](CONTRIBUTORS.md)。
 
 <a href="https://github.com/windirstat/windirstat/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=windirstat/windirstat&max=1000" alt="WinDirStat contributor tiles" />
 </a>
 
-For additional historical contributors, testers, and translators, please check out [the contributors page](CONTRIBUTORS.md).
+## 徽标
 
-## Logo
-
-![WinDirStat logo](windirstat/logos/logo_256px.png)
+![盘寻 logo](windirstat/logos/logo_256px.png)

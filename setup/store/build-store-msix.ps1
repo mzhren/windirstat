@@ -5,11 +5,11 @@ using namespace System.Drawing.Imaging
 [CmdletBinding(PositionalBinding = $false)]
 param(
     [ValidateSet("x86", "x64", "arm64")][string[]] $Platform = @("x86", "x64", "arm64"),
-    [string] $IdentityName = "WinDirStatTeam.WinDirStat",
+    [string] $IdentityName = "diskseek.space.DiskSeek",
     [string] $Publisher = "CN=BACE0F4C-E0CC-4A1D-945E-61E8D6D94180",
     [string] $CertificateThumbprint,
-    [string] $PublisherDisplayName = "WinDirStat Team",
-    [string] $DisplayName = "WinDirStat",
+    [string] $PublisherDisplayName = "diskseek.space",
+    [string] $DisplayName = "DiskSeek",
     [string] $MinVersion = "10.0.17763.0",
     [string] $MaxVersionTested = "10.0.29999.0",
     [string] $OutDir
@@ -250,8 +250,8 @@ ForEach ($BuildMode in @("store", "local"))
 
         $ExePath = $null
         ForEach ($Candidate in @(
-            (Join-Path $RepoRoot "publish\$Arch\WinDirStat.exe"),
-            (Join-Path $RepoRoot "build\WinDirStat_$Arch.exe")
+            (Join-Path $RepoRoot "publish\$Arch\DiskSeek.exe"),
+            (Join-Path $RepoRoot "build\DiskSeek_$Arch.exe")
         ))
         {
             If (Test-Path $Candidate)
@@ -261,7 +261,7 @@ ForEach ($BuildMode in @("store", "local"))
             }
         }
 
-        Copy-Item -Path $ExePath -Destination (Join-Path $StageDir "WinDirStat.exe") -Force
+        Copy-Item -Path $ExePath -Destination (Join-Path $StageDir "DiskSeek.exe") -Force
         Copy-Item -Path (Join-Path $GeneratedAssetsDir "*") -Destination $StageAssetsDir -Force
 
         $Manifest = $ManifestTemplate
@@ -287,7 +287,7 @@ ForEach ($BuildMode in @("store", "local"))
         & makepri.exe new /pr $StageDir /cf $PriConfigPath /of (Join-Path $StageDir "resources.pri") /o
         If ($LASTEXITCODE -ne 0) { Throw "makepri.exe failed while indexing resources for $Arch" }
 
-        $PackagePath = Join-Path $PackageDir ("WinDirStat_{0}.msix" -f $Arch)
+        $PackagePath = Join-Path $PackageDir ("DiskSeek_{0}.msix" -f $Arch)
         Write-Host "Packing $PackagePath..."
         & makeappx.exe pack /d $StageDir /p $PackagePath /h SHA256 /o
         If ($LASTEXITCODE -ne 0) { Throw "makeappx.exe failed while packing $PackagePath" }
@@ -297,7 +297,7 @@ ForEach ($BuildMode in @("store", "local"))
     # Create MSIX bundle
     $MsixPackages | Copy-Item -Destination $BundleInputDir -Force
     $BundleArch = ($Platform -join "_")
-    $BundlePath = Join-Path $PackageDir ("WinDirStat_{0}.msixbundle" -f $BundleArch)
+    $BundlePath = Join-Path $PackageDir ("DiskSeek_{0}.msixbundle" -f $BundleArch)
     Write-Host "Bundling $BundlePath..."
     & makeappx.exe bundle /d $BundleInputDir /p $BundlePath /o
     If ($LASTEXITCODE -ne 0)

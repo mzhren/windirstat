@@ -105,7 +105,7 @@ if ($List) {
 }
 if (-not $IsWindows) { Write-Host 'This suite requires Windows.' -ForegroundColor Red; exit 2 }
 if (-not $ExePath) {
-    $candidates = @('build\WinDirStat_x64.exe', 'publish\x64\WinDirStat.exe') |
+    $candidates = @('build\DiskSeek_x64.exe', 'publish\x64\DiskSeek.exe') |
         ForEach-Object { Get-Item -LiteralPath (Join-Path $RepoRoot $_) -ErrorAction SilentlyContinue } |
         Sort-Object LastWriteTimeUtc -Descending
     $ExePath = @($candidates | Select-Object -First 1 -ExpandProperty FullName) -join ''

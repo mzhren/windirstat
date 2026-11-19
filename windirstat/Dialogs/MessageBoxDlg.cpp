@@ -422,10 +422,10 @@ int ShowMessageBox(const std::wstring& message, const UINT type)
 {
     if (!DarkMode::IsDarkModeActive())
     {
-        return MessageBoxW(GetDialogOwner(), message.c_str(), L"WinDirStat", type);
+        return MessageBoxW(GetDialogOwner(), message.c_str(), wds::strAppName, type);
     }
 
-    return ShowMessageBox(nullptr, message, wds::strWinDirStat, type);
+    return ShowMessageBox(nullptr, message, wds::strAppName, type);
 }
 
 int ShowMessageBox(const HWND wnd, const std::wstring& message, const std::wstring& title, const UINT type)

@@ -512,7 +512,7 @@ bool ExecuteCommandInConsole(const std::wstring& command, const std::wstring& ti
 {
     const std::wstring cmd = GetSysDirectory() + L"\\CMD.EXE";
     const std::wstring cmdline = std::format(LR"(/C "TITLE {} - {} & {} & PAUSE")",
-        wds::strWinDirStat, title, command);
+        wds::strAppName, title, command);
 
     return ShellExecuteWrapper(cmd, cmdline, L"runas");
 }

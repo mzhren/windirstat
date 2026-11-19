@@ -30,11 +30,11 @@
 #define FILE_MINVER                 PRD_MINVER // minor file version
 #define FILE_PATCH                  PRD_PATCH // patch number for version
 #define FILE_BUILD                  PRD_BUILD // build number for version
-#define TEXT_WEBSITE                https:/##/windirstat.net // website
-#define TEXT_PRODUCTNAME            WinDirStat // product's name
-#define TEXT_FILEDESC               Windows Directory Statistics (WinDirStat) // component description
+#define TEXT_WEBSITE                https:/##/diskseek.space // website
+#define TEXT_PRODUCTNAME            盘寻 // product's name
+#define TEXT_FILEDESC               盘寻 (diskseek.space) - 磁盘空间统计 // component description
 
-#define STRING_COMPANY              WinDirStat Team
-#define STRING_COPYRIGHT            "© WinDirStat Team"
-#define STRING_EXENAME              WinDirStat.exe
+#define STRING_COMPANY              diskseek.space
+#define STRING_COPYRIGHT            "© diskseek.space / WinDirStat Team"
+#define STRING_EXENAME              DiskSeek.exe
 #define SOURCE_REPOSITORY           https://github.com/windirstat/windirstat

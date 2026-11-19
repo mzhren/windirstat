@@ -158,7 +158,14 @@ static std::array<size_t, FIELD_COUNT> ParseHeaderLine(const std::vector<std::ws
     for (const auto [c, name] : std::views::enumerate(header))
     {
         if (const auto it = std::ranges::find(columns, name); it != columns.end())
+        {
             orderMap[it - columns.begin()] = static_cast<size_t>(c);
+        }
+        else if (name == L"WinDirStat Attributes")
+        {
+            // Accept the legacy WinDirStat column name so older reports still import
+            orderMap[FIELD_ATTRIBUTES_WDS] = static_cast<size_t>(c);
+        }
     }
     return orderMap;
 }

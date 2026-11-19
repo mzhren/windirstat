@@ -57,7 +57,7 @@ void CDirStatApp::RestartApplication(const bool resetPreferences)
         // Only clean up registry preferences if not in portable mode
         if (!InPortableMode())
         {
-            RegDeleteTree(HKEY_CURRENT_USER, L"Software\\WinDirStat");
+            RegDeleteTree(HKEY_CURRENT_USER, wds::strSettingsRoot);
         }
 
         // Enable portable mode by creating the file
@@ -603,15 +603,20 @@ void CDirStatApp::LegacyUninstall()
     namespace fs = std::filesystem;
     std::error_code ec;
 
-    // Kill WinDirStat processes based on executable name
+    // Kill legacy WinDirStat and current application processes based on executable name
     if (const SmartPointer snap(CloseHandle, CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0)); snap.IsValid())
     {
-        const std::wstring exeName = wds::strWinDirStat;
+        const std::array exeNames = { wds::strAppExeBase, wds::strLegacyApp };
         PROCESSENTRY32W pe{ .dwSize = sizeof(pe) };
         for (bool hasProcess = Process32First(snap, &pe); hasProcess; hasProcess = Process32Next(snap, &pe))
         {
-            if (_wcsnicmp(pe.szExeFile, exeName.c_str(), exeName.size()) != 0 ||
-                pe.th32ProcessID == GetCurrentProcessId()) continue;
+            if (pe.th32ProcessID == GetCurrentProcessId()) continue;
+
+            const bool matched = std::ranges::any_of(exeNames, [&pe](const wchar_t* const exeName)
+            {
+                return _wcsnicmp(pe.szExeFile, exeName, wcslen(exeName)) == 0;
+            });
+            if (!matched) continue;
 
             SmartPointer h(CloseHandle, OpenProcess(PROCESS_TERMINATE, false, pe.th32ProcessID));
             if (h.IsValid()) TerminateProcess(h, 0);
@@ -623,7 +628,7 @@ void CDirStatApp::LegacyUninstall()
     std::vector<RegInfo> regKeys;
 
     // Add HKLM key
-    regKeys.push_back({ HKEY_LOCAL_MACHINE, wds::strUninstall });
+    regKeys.push_back({ HKEY_LOCAL_MACHINE, wds::strLegacyUninstall });
 
     // Add HKU keys for all users
     if (CRegKey key; key.Open(HKEY_USERS, nullptr, KEY_ENUMERATE_SUB_KEYS) == ERROR_SUCCESS)
@@ -633,7 +638,7 @@ void CDirStatApp::LegacyUninstall()
             key.EnumKey(i, sidName.data(), &sidSize) == ERROR_SUCCESS;
             i++, sidSize = static_cast<DWORD>(sidName.size()))
         {
-            regKeys.push_back({ HKEY_USERS, std::wstring(sidName.data()) + L"\\" + wds::strUninstall });
+            regKeys.push_back({ HKEY_USERS, std::wstring(sidName.data()) + L"\\" + wds::strLegacyUninstall });
         }
     }
 
@@ -655,7 +660,8 @@ void CDirStatApp::LegacyUninstall()
                 {
                     auto fname = MakeLower(file.path().filename().wstring());
                     if (fname.starts_with(L"wdsh") || fname.starts_with(L"wdsr") ||
-                        fname.starts_with(L"windirstat") || fname == L"uninstall.exe")
+                        fname.starts_with(L"windirstat") || fname.starts_with(L"diskseek") ||
+                        fname == L"uninstall.exe")
                     {
                         fs::remove(file, ec);
                     }

@@ -551,7 +551,7 @@ void CWinDirStatModel::DeletePhysicalItems(const std::vector<CItem*>& items, con
             remoteChanged.insert(result.refresh.begin(), result.refresh.end());
             cancelled = pdlg->IsCancelled();
         }).ShowModal();
-        if (!error.empty()) ShowMessageBox(GetMainWindowHandle(), error, wds::strWinDirStat, MB_OK | MB_ICONERROR);
+        if (!error.empty()) ShowMessageBox(GetMainWindowHandle(), error, wds::strAppName, MB_OK | MB_ICONERROR);
     }
 
     if (emptyOnly)

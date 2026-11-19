@@ -1,5 +1,5 @@
 @ECHO OFF
-TITLE Building WinDirStat
+TITLE Building DiskSeek
 SETLOCAL EnableExtensions EnableDelayedExpansion
 
 :: let Windows PowerShell initialize its own module paths
@@ -25,7 +25,7 @@ SET STOREBLDDIR=%BLDDIR%\store
 
 :: cert info to use for signing
 SET "TSAURL=http://time.certum.pl/"
-SET "LIBNAME=WinDirStat"
+SET "LIBNAME=DiskSeek"
 SET "LIBURL=https://github.com/WinDirStat/WinDirStat"
 
 :: prepend 7-Zip and system paths
@@ -61,9 +61,9 @@ IF ERRORLEVEL 1 EXIT /B 1
 IF EXIST "%PUBDIR%" RD /S /Q "%PUBDIR%"
 FOR %%A IN (arm64 x86 x64) DO (
    IF NOT EXIST "%PUBDIR%\%%A" MKDIR "%PUBDIR%\%%A"
-   COPY /Y "%BLDDIR%\WinDirStat_%%A.exe" "%PUBDIR%\%%A\WinDirStat.exe"
-   COPY /Y "%BLDDIR%\WinDirStat_%%A.pdb" "%PUBDIR%\%%A\WinDirStat.pdb"
-   COPY /Y "%BLDDIR%\WinDirStat-%%A.msi" "%PUBDIR%"
+   COPY /Y "%BLDDIR%\DiskSeek_%%A.exe" "%PUBDIR%\%%A\DiskSeek.exe"
+   COPY /Y "%BLDDIR%\DiskSeek_%%A.pdb" "%PUBDIR%\%%A\DiskSeek.pdb"
+   COPY /Y "%BLDDIR%\DiskSeek-%%A.msi" "%PUBDIR%"
 )
 
 :: build the msix files
@@ -77,13 +77,13 @@ IF ERRORLEVEL 1 ECHO MSI/MSIX signing failed; continuing without a signed MSI.
 :: archive executables and debug files
 7z.EXE >NUL 2>&1
 IF %ERRORLEVEL% NEQ 0 ECHO 7-Zip not found; skipping archives
-IF %ERRORLEVEL% EQU 0 7z.EXE a -mx=9 -mf=off "%PUBDIR%\WinDirStat.7z" "%PUBDIR%\*\*.exe"
-IF %ERRORLEVEL% EQU 0 7z.EXE a -mx=9 -mf=off "%PUBDIR%\WinDirStat-DebugSymbols.7z" "%PUBDIR%\*\*.pdb"
-IF %ERRORLEVEL% EQU 0 7z.EXE a -tzip -mx=9 "%PUBDIR%\WinDirStat.zip" "%PUBDIR%\*\*.exe"
+IF %ERRORLEVEL% EQU 0 7z.EXE a -mx=9 -mf=off "%PUBDIR%\DiskSeek.7z" "%PUBDIR%\*\*.exe"
+IF %ERRORLEVEL% EQU 0 7z.EXE a -mx=9 -mf=off "%PUBDIR%\DiskSeek-DebugSymbols.7z" "%PUBDIR%\*\*.pdb"
+IF %ERRORLEVEL% EQU 0 7z.EXE a -tzip -mx=9 "%PUBDIR%\DiskSeek.zip" "%PUBDIR%\*\*.exe"
 DEL /F /S /Q "%PUBDIR%\*.pdb" >NUL 2>&1
 
 :: output hash information
-SET HASHFILE=%PUBDIR%\WinDirStat-Hashes.txt
+SET HASHFILE=%PUBDIR%\DiskSeek-Hashes.txt
 IF EXIST "%HASHFILE%" DEL /F "%HASHFILE%"
 %POWERSHELL% -Command "$f = Get-ChildItem -Recurse -Include @('*.msi','*.zip','*.7z','*.msix','*.msixbundle') -Path '%PUBDIR%' | Where-Object { $_.FullName -notlike '*\unsigned\*' }; 'SHA256','SHA1','MD5' | ForEach-Object { $f | Get-FileHash -Algorithm $_ | Out-File -Append '%HASHFILE%' -Width 256 }"
 %POWERSHELL% -Command "$Data = Get-Content '%HASHFILE%'; if ($Data) { $Data.Replace((Get-Item -LiteralPath '%PUBDIR%').FullName + '\','').Trim() | Set-Content '%HASHFILE%' }"

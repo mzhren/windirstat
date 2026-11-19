@@ -30,7 +30,9 @@ namespace wds
     inline constexpr auto strAccessibilityKey = L"Software\\Microsoft\\Accessibility";
     inline constexpr auto strExplorerKey      = L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer";
     inline constexpr auto strThemesKey        = L"Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize";
-    inline constexpr auto strUninstall        = L"Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\WinDirStat";
+    inline constexpr auto strSettingsRoot     = L"Software\\DiskSeek";
+    inline constexpr auto strSettingsKey      = L"Software\\DiskSeek\\DiskSeek";
+    inline constexpr auto strLegacyUninstall  = L"Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\WinDirStat";
 
     inline constexpr auto strInvalidAttributes     = L"??????";
     inline constexpr auto chrAttributeReadonly     = L'R'; /*FILE_ATTRIBUTE_READONLY*/
@@ -43,7 +45,14 @@ namespace wds
     inline constexpr auto chrAttributeEncrypted    = L'E'; /*FILE_ATTRIBUTE_ENCRYPTED*/
     inline constexpr auto chrAttributeSparse       = L'Z'; /*FILE_ATTRIBUTE_SPARSE*/
 
-    inline constexpr auto strWinDirStat = L"WinDirStat";
+    // Application identity
+    inline constexpr auto strSlogan     = L"盘寻一下，空间回来"; // application slogan
+    inline constexpr auto strAppName    = L"盘寻";               // display name
+    inline constexpr auto strShellKey   = L"DiskSeek";           // shell context menu registry key name
+    inline constexpr auto strAppExeBase = L"DiskSeek";           // executable base name
+
+    // Legacy WinDirStat identifiers used for migration and cleanup
+    inline constexpr auto strLegacyApp = L"WinDirStat";
     inline constexpr std::wstring_view strAlpha{ L"ABCDEFGHIJKLMNOPQRSTUVWXYZ" };
     inline constexpr int alphaSize = std::ssize(strAlpha);
 

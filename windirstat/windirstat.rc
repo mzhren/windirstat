@@ -27,7 +27,7 @@ LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 
 STRINGTABLE
 BEGIN
-    IDS_APP_TITLE           "WinDirStat"
+    IDS_APP_TITLE           "盘寻"
     IDS_AUTHOR_EMAIL        "team@windirstat.net"
     IDS_FILTER_EXAMPLE_DIRS "C:\\Windows\\Sys*\nC:\\ProgramData"
     IDS_FILTER_EXAMPLE_DIRS_REGEX "C:\\\\Windows\\\\Sys.*\nC:\\\\ProgramData"
@@ -35,7 +35,7 @@ BEGIN
     IDS_FILTER_EXAMPLE_FILES_REGEX ".*\\.sys\n.*\\.exe"
     IDS_URL_HELP            "https://github.com/windirstat/windirstat/wiki"
     IDS_URL_REPORT_BUG      "https://github.com/windirstat/windirstat/issues/new/choose"
-    IDS_URL_WEBSITE         "https://windirstat.net"
+    IDS_URL_WEBSITE         "https://diskseek.space"
 END
 
 #endif    // Neutral resources

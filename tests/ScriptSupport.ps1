@@ -112,7 +112,7 @@ function New-MapAnalysisContext {
         Solution     = $solution
         AnalysisRoot = Join-Path $root 'build_analysis'
         Platform     = $Platform
-        ExeName      = "WinDirStat_$platformShort"
+        ExeName      = "DiskSeek_$platformShort"
         MSBuild      = $msbuild
         Undname      = $undname
     }

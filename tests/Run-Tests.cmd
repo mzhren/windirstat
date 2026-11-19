@@ -1,4 +1,4 @@
-@ECHO OFF
+﻿@ECHO OFF
 SETLOCAL
 
 :: Runs the behavioral suite against the newest local x64 build or published executable.
@@ -7,7 +7,7 @@ SETLOCAL
 ::   Run-Tests.cmd -List
 ::   Run-Tests.cmd -Only Rendering
 ::   Run-Tests.cmd -Tag Race -Repeat 5 -Shuffle -Seed 42
-::   Run-Tests.cmd -Profile Extended -ExePath build\WinDirStat_x64.exe
+::   Run-Tests.cmd -Profile Extended -ExePath build\DiskSeek_x64.exe
 
 WHERE pwsh >NUL 2>&1
 IF %ERRORLEVEL% NEQ 0 (

@@ -43,7 +43,7 @@ std::vector<std::wstring> CDialog::PickFolders(WindowRef parent, const bool mult
     if (FAILED(dialog.CoCreateInstance(CLSID_FileOpenDialog)) || FAILED(dialog->GetOptions(&options)) ||
         FAILED(dialog->SetOptions(options | FOS_PICKFOLDERS | FOS_FORCEFILESYSTEM | FOS_DONTADDTORECENT |
             (multiSelect ? FOS_ALLOWMULTISELECT : 0))) ||
-        FAILED(dialog->SetTitle(L"WinDirStat")) || FAILED(dialog->Show(GetDialogOwner(parent)))) return {};
+        FAILED(dialog->SetTitle(wds::strAppName)) || FAILED(dialog->Show(GetDialogOwner(parent)))) return {};
 
     CComPtr<IShellItemArray> results;
     DWORD count = 0;

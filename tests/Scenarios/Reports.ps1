@@ -137,7 +137,7 @@ function Test-ReportSerialization {
     }
     $snapshot = Get-DiskSnapshot $root
     $fields = @('Name', 'Files', 'Folders', 'Logical Size', 'Physical Size', 'Attributes', 'Last Change',
-        'WinDirStat Attributes', 'Index', 'ScanOutcome', 'ScanError')
+        '盘寻 Attributes', 'Index', 'ScanOutcome', 'ScanError')
     foreach ($owner in 0, 1) {
         $runner = New-TestRunner @{ FileTreeView = @{ ColumnVisibility = "1,1,1,1,1,1,1,1,1,1,$owner" } }
         $reports = @{}
@@ -179,7 +179,7 @@ function Test-ReportRoundTrip {
     $app.Roots = @($root)
     $loaded = Save-AppReport $app 'loaded' -Format $Case.Format
     $fields = @('Name', 'Files', 'Folders', 'Logical Size', 'Physical Size', 'Attributes', 'Last Change',
-        'WinDirStat Attributes', 'Index', 'ScanOutcome', 'ScanError')
+        '盘寻 Attributes', 'Index', 'ScanOutcome', 'ScanError')
     Assert-Sequence (Get-ReportSignature $loaded $fields) (Get-ReportSignature $source $fields) `
         'Loading and re-exporting uses the saved model even when live files have changed'
     $otherFormat = if ($Case.Format -eq 'csv') { 'json' } else { 'csv' }
@@ -276,14 +276,14 @@ function Test-MalformedReportType {
     foreach ($type in '0x30000200', '0x30000204', '0x30000008', '0x30000010', '0x30000020',
         '0x30008002', '0xB0008004', '0x30008001') {
         $row = $source[0].PSObject.Copy()
-        $row.'WinDirStat Attributes' = $type
+        $row.'盘寻 Attributes' = $type
         if ([Convert]::ToUInt32($type, 16) -band 0x8000) {
             $row.Name = 's3://fixture/?region=us-east-1&endpoint=http%3A%2F%2F127.0.0.1%3A9'
         }
         $row.Index = '0x0000000000000001'
         $drive = $source[0].PSObject.Copy()
         $drive.Name = 'V:\'
-        $drive.'WinDirStat Attributes' = '0x20000002'
+        $drive.'盘寻 Attributes' = '0x20000002'
         $rows = if ([Convert]::ToUInt32($type, 16) -band 0x8000) { @($row) } else { @($row, $drive) }
         $path = Join-Path $Context.Root "malformed-$type.$($Case.Format)"
         if ($Case.Format -eq 'json') {
@@ -305,12 +305,12 @@ function Test-MalformedReportType {
 
     $remoteRoot = $source[0].PSObject.Copy()
     $remoteRoot.Name = 's3://fixture/?region=us-east-1&endpoint=http%3A%2F%2F127.0.0.1%3A9'
-    $remoteRoot.'WinDirStat Attributes' = '0x30008004'
+    $remoteRoot.'盘寻 Attributes' = '0x30008004'
     $remoteRoot.Files = '1'
     $remoteRoot.Folders = '0'
     $remoteFile = (Get-ReportFiles $source)[0].PSObject.Copy()
     $remoteFile.Name = $remoteRoot.Name.Replace('/?', '/file.txt?')
-    $remoteFile.'WinDirStat Attributes' = '0x20008008'
+    $remoteFile.'盘寻 Attributes' = '0x20008008'
     $remoteRoot.'Logical Size' = $remoteFile.'Logical Size'
     $remoteRoot.'Physical Size' = $remoteFile.'Physical Size' = ''
     $path = Join-Path $Context.Root "valid-remote.$($Case.Format)"

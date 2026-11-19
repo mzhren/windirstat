@@ -84,7 +84,7 @@ bool CSettingsSheet::ConfirmApply(const UINT command)
     if (!m_restartRequest || (command != IDOK && m_alreadyAsked)) return true;
 
     const int result = ShowMessageBox(*this, Localization::Lookup(IDS_RESTART_REQUEST),
-        wds::strWinDirStat, MB_YESNOCANCEL);
+        wds::strAppName, MB_YESNOCANCEL);
     if (result == IDCANCEL) return false;
     m_alreadyAsked = result == IDNO;
     m_restartAfterApply = result == IDYES;

@@ -79,10 +79,10 @@
     inspection).
 
 .EXAMPLE
-    .\Build-PgoTrainingProfiles.ps1 -ExePath C:\PGO\WinDirStat_x64.exe
+    .\Build-PgoTrainingProfiles.ps1 -ExePath C:\PGO\DiskSeek_x64.exe
 
 .EXAMPLE
-    .\Build-PgoTrainingProfiles.ps1 -ExePath C:\PGO\WinDirStat_x64.exe `
+    .\Build-PgoTrainingProfiles.ps1 -ExePath C:\PGO\DiskSeek_x64.exe `
         -OnlyScenarios ScanFastEngine,DupeScanWindowsJson -KeepArtifacts
 #>
 

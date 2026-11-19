@@ -244,7 +244,7 @@ void CMainFrame::OnAdvancedShadowCopy(const UINT nID)
     if (!success)
     {
         const std::wstring msg = Localization::Format(IDS_SHADOW_COPY_FAILED, GetDrive(drive));
-        ShowMessageBox(*this, msg, wds::strWinDirStat, MB_ICONERROR | MB_OK);
+        ShowMessageBox(*this, msg, wds::strAppName, MB_ICONERROR | MB_OK);
     }
 }
 

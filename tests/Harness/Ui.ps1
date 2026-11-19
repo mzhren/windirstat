@@ -19,7 +19,7 @@ function Start-TestApp {
     $app.Window = Wait-Until {
         @([TestDesktop]::Windows($process.Id) | Where-Object {
             ($Hidden -or [TestDesktop]::IsWindowVisible($_)) -and [TestDesktop]::Class($_) -like 'WdsWindow.*' -and
-            [TestDesktop]::Text($_) -like '*WinDirStat*'
+            [TestDesktop]::Text($_) -like '*盘寻*'
         } | Select-Object -First 1)
     } 'The process creates its main window'
     if (-not $Hidden) {

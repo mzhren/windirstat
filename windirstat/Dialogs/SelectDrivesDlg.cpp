@@ -1002,7 +1002,7 @@ void CSelectDrivesDlg::OnBnClickedFastScanCheckbox()
     if (IsChecked(IDC_FAST_SCAN_CHECKBOX) && IsElevationAvailable())
     {
         if (ShowMessageBox(*this, Localization::Lookup(IDS_ELEVATION_QUESTION),
-            wds::strWinDirStat, MB_YESNO | MB_ICONQUESTION) == IDYES)
+            wds::strAppName, MB_YESNO | MB_ICONQUESTION) == IDYES)
         {
             const auto previousSettings = std::tuple{ COptions::UseFastScanEngine.Obj(),
                 COptions::SelectDrivesRadio.Obj(), COptions::SelectDrivesDrives.Obj(), COptions::SelectDrivesFolder.Obj(),
