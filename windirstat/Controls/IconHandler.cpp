@@ -379,6 +379,30 @@ namespace Icons
         g.DrawLine(&sparklePen, 48, 46, 56, 46);
     }
 
+    void PaintDuplicateClean(Graphics& g)
+    {
+        // Back sheet with its corner fold
+        const Pen backPen(Neutral(), 4);
+        const Point back[] = { {6, 2}, {30, 2}, {40, 12}, {40, 24}, {6, 24} };
+        g.DrawPolygon(&backPen, back, static_cast<INT>(std::size(back)));
+        const Point backFold[] = { {30, 2}, {30, 12}, {40, 12} };
+        g.DrawLines(&backPen, backFold, static_cast<INT>(std::size(backFold)));
+
+        // Front sheet occluding the back one
+        const SolidBrush frontBrush(C(255, 255, 255));
+        const Pen frontPen(C(0, 102, 204), 4);
+        const Point front[] = { {22, 18}, {46, 18}, {58, 30}, {58, 60}, {22, 60} };
+        g.FillPolygon(&frontBrush, front, static_cast<INT>(std::size(front)));
+        g.DrawPolygon(&frontPen, front, static_cast<INT>(std::size(front)));
+        const Point frontFold[] = { {46, 18}, {46, 30}, {58, 30} };
+        g.DrawLines(&frontPen, frontFold, static_cast<INT>(std::size(frontFold)));
+
+        // Content lines
+        const SolidBrush lineBrush(C(0, 102, 204));
+        g.FillRectangle(&lineBrush, 28, 40, 24, 3);
+        g.FillRectangle(&lineBrush, 28, 48, 24, 3);
+    }
+
     void PaintFilter(Graphics& g, const bool active)
     {
         const Point funnelShape[] = { {8, 6}, {56, 6}, {56, 14}, {38, 34}, {38, 56}, {26, 52}, {26, 34}, {8, 14} };

@@ -325,6 +325,7 @@ protected:
     void OnViewWindowLayout();
     void OnConfigure();
     void OnSmartClean();
+    void OnDuplicateClean();
     void OnDestroy();
     LRESULT OnTaskButtonCreated(WPARAM, LPARAM);
     UINT OnPowerBroadcast(UINT, LPARAM);
@@ -398,6 +399,7 @@ inline std::span<const RouteEntry> CMainFrame::Routes()
     {
         Route::Command<&OnConfigure>(ID_CONFIGURE),
         Route::Command<&OnSmartClean>(ID_CLEANUP_SMARTCLEAN),
+        Route::Command<&OnDuplicateClean>(ID_CLEANUP_DUPCLEAN),
         Route::Command<&OnViewShowFileTypes>(ID_VIEW_SHOWFILETYPES),
         Route::Command<&OnViewShowVisualization>(ID_VIEW_SHOWVISUALIZATION),
         Route::Command<&OnViewTreeMapStyle>(ID_VIEW_TREEMAP_ROWS, ID_VIEW_TREEMAP_MOORE),

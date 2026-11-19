@@ -197,6 +197,9 @@ POWERSHELL.EXE -NoLogo -ExecutionPolicy Unrestricted -NoProfile -File "$(Project
     <ClInclude Include="RecoveryNtfs.h" />
     <ClInclude Include="RecoveryShared.h" />
     <ClInclude Include="SmartClean.h" />
+    <ClInclude Include="DuplicateClean.h" />
+    <ClInclude Include="Dialogs\SmartCleanDlg.h" />
+    <ClInclude Include="Dialogs\DuplicateCleanDlg.h" />
     <ClInclude Include="Dialogs\SmartCleanDlg.h" />
     <ClInclude Include="RecoveryExFat.h" />
     <ClInclude Include="RecoveryFat.h" />
@@ -298,6 +301,7 @@ POWERSHELL.EXE -NoLogo -ExecutionPolicy Unrestricted -NoProfile -File "$(Project
     <ClCompile Include="RecoveryNtfs.cpp" />
     <ClCompile Include="RecoveryShared.cpp" />
     <ClCompile Include="SmartClean.cpp" />
+    <ClCompile Include="DuplicateClean.cpp" />
     <ClCompile Include="HelpersTasks.cpp">
     </ClCompile>
     <ClCompile Include="..\contrib\xxhash\xxhash.c">
@@ -338,6 +342,7 @@ POWERSHELL.EXE -NoLogo -ExecutionPolicy Unrestricted -NoProfile -File "$(Project
     <ClCompile Include="Property.cpp" />
     <ClCompile Include="Dialogs\SearchDlg.cpp" />
     <ClCompile Include="Dialogs\SmartCleanDlg.cpp" />
+    <ClCompile Include="Dialogs\DuplicateCleanDlg.cpp" />
     <ClCompile Include="Dialogs\RecoveryDlg.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>

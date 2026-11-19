@@ -14,6 +14,7 @@
 #include "DrawTextCache.h"
 #include "FileInfoView.h"
 #include "SmartCleanDlg.h"
+#include "DuplicateCleanDlg.h"
 #include "ExtensionView.h"
 #include "ProgressDlg.h"
 #include "RecoveryDlg.h"
@@ -707,6 +708,7 @@ void CMainFrame::RebuildToolBar(const bool rebuildButtons)
         { ID_HELP_MANUAL,             IDS_HELP_MANUAL,             Icons::PaintHelp},
         { ID_SEPARATOR,               {},{}},
         { ID_CLEANUP_SMARTCLEAN,      IDS_SMARTCLEAN_BTN,          Icons::PaintSmartClean},
+        { ID_CLEANUP_DUPCLEAN,        IDS_DUPCLEAN_BTN,            Icons::PaintDuplicateClean},
         { ID_SEPARATOR,               {},{}},
         { ID_WATCHER_LABEL,           IDS_WATCHER,                 {}},
         { ID_WATCHER_START,           {},                          Icons::Char(L'▶', RGB( 50, 205,  50))},
@@ -940,6 +942,11 @@ void CMainFrame::OnUpdateViewFontSize(CCmdUI* pCmdUI) const
 void CMainFrame::OnSmartClean()
 {
     CSmartCleanDlg().ShowModal();
+}
+
+void CMainFrame::OnDuplicateClean()
+{
+    CDuplicateCleanDlg().ShowModal();
 }
 
 void CMainFrame::OnConfigure()

@@ -106,6 +106,7 @@ namespace Icons
     void PaintFileSelect(Graphics& g);
     void PaintFolderAppend(Graphics& g);
     void PaintSmartClean(Graphics& g);
+    void PaintDuplicateClean(Graphics& g);
     void PaintFilter(Graphics& g, bool active = false);
     void PaintHelp(Graphics& g);
     void PaintPause(Graphics& g);
