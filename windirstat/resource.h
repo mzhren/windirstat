@@ -28,6 +28,14 @@
 #define IDD_AZURE_CONNECTION            121
 #define IDD_SELECTCLOUD                 122
 #define IDD_CLOUD_CONNECTION            123
+#define IDD_SMARTCLEAN                  126
+#define IDC_SMARTCLEAN_LIST             1240
+#define IDC_SMARTCLEAN_DESC             1241
+#define IDC_SMARTCLEAN_STATUS           1242
+#define IDC_SMARTCLEAN_NOTE             1243
+#define IDC_SMARTCLEAN_SELECTALL        1244
+#define IDC_SMARTCLEAN_SCAN             1245
+#define IDC_SMARTCLEAN_CLEAN            1246
 #define IDC_ADD_CLEANUP                 1000
 #define IDC_ADD_FOLDER                  1001
 #define IDC_ASKFORCONFIRMATION          1002
@@ -431,6 +439,7 @@
 #define ID_WATCHER_START                32967
 #define ID_WDS_CONTROL                  32968
 #define ID_FILE_SELECT_CLOUD            32969
+#define ID_CLEANUP_SMARTCLEAN           32971
 #define IDS_APP_TITLE                   57344
 #define IDS_AUTHOR_EMAIL                57345
 #define IDS_FILTER_EXAMPLE_DIRS         57346
@@ -445,9 +454,9 @@
 //
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        126
-#define _APS_NEXT_COMMAND_VALUE         32971
-#define _APS_NEXT_CONTROL_VALUE         1205
+#define _APS_NEXT_RESOURCE_VALUE        127
+#define _APS_NEXT_COMMAND_VALUE         32972
+#define _APS_NEXT_CONTROL_VALUE         1247
 #define _APS_NEXT_SYMED_VALUE           126
 #endif
 #endif

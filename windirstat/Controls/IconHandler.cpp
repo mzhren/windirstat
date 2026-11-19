@@ -352,6 +352,33 @@ namespace Icons
         g.FillRectangle(&plusBrush, 47, 41, 6, 18);
     }
 
+    void PaintSmartClean(Graphics& g)
+    {
+        // Broom handle
+        Pen handlePen(Neutral(), 6);
+        handlePen.SetStartCap(LineCapRound);
+        handlePen.SetEndCap(LineCapRound);
+        g.DrawLine(&handlePen, 46, 6, 26, 34);
+
+        // Bristle head flaring toward the bottom
+        const SolidBrush headBrush(C(0, 156, 221));
+        const Point head[] = { {17, 32}, {35, 32}, {43, 56}, {9, 56} };
+        g.FillPolygon(&headBrush, head, static_cast<INT>(std::size(head)));
+        Pen bristlePen(C(255, 255, 255), 3);
+        g.DrawLine(&bristlePen, 21, 38, 18, 53);
+        g.DrawLine(&bristlePen, 26, 38, 26, 53);
+        g.DrawLine(&bristlePen, 31, 38, 34, 53);
+
+        // Sparkles
+        Pen sparklePen(C(255, 190, 60), 3);
+        sparklePen.SetStartCap(LineCapRound);
+        sparklePen.SetEndCap(LineCapRound);
+        g.DrawLine(&sparklePen, 10, 6, 10, 18);
+        g.DrawLine(&sparklePen, 4, 12, 16, 12);
+        g.DrawLine(&sparklePen, 52, 42, 52, 50);
+        g.DrawLine(&sparklePen, 48, 46, 56, 46);
+    }
+
     void PaintFilter(Graphics& g, const bool active)
     {
         const Point funnelShape[] = { {8, 6}, {56, 6}, {56, 14}, {38, 34}, {38, 56}, {26, 52}, {26, 34}, {8, 14} };

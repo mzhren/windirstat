@@ -295,6 +295,22 @@ public:
     int GetFirstSelectedIndex() const { return GetNextItem(-1, LVNI_SELECTED); }
     int GetNextSelectedIndex(const int index) const { return GetNextItem(index, LVNI_SELECTED); }
 
+    int  InsertItem(const LVITEMW* item) { return static_cast<int>(SendNativeMessage(LVM_INSERTITEMW, 0, reinterpret_cast<LPARAM>(item))); }
+    bool DeleteAllItems() { return static_cast<bool>(SendNativeMessage(LVM_DELETEALLITEMS)); }
+    bool SetItemText(const int i, const int sub, const std::wstring& text)
+    {
+        LVITEMW it{}; it.iItem = i; it.iSubItem = sub; it.mask = LVIF_TEXT;
+        it.pszText = const_cast<LPWSTR>(text.c_str());
+        return static_cast<bool>(SendNativeMessage(LVM_SETITEMW, 0, reinterpret_cast<LPARAM>(&it)));
+    }
+    bool GetCheck(const int i) const
+    {
+        return (GetItemState(i, LVIS_STATEIMAGEMASK) & LVIS_STATEIMAGEMASK) == INDEXTOSTATEIMAGEMASK(2);
+    }
+    bool SetCheck(const int i, const bool checked)
+    {
+        return SetItemState(i, INDEXTOSTATEIMAGEMASK(checked ? 2 : 1), LVIS_STATEIMAGEMASK);
+    }
 };
 
 // -----------------------------------------------------------------------------

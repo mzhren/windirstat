@@ -13,6 +13,7 @@
 #include "FileTreeView.h"
 #include "DrawTextCache.h"
 #include "FileInfoView.h"
+#include "SmartCleanDlg.h"
 #include "ExtensionView.h"
 #include "ProgressDlg.h"
 #include "RecoveryDlg.h"
@@ -705,6 +706,8 @@ void CMainFrame::RebuildToolBar(const bool rebuildButtons)
         { ID_CONFIGURE,               IDS_MENU_SETTINGS,           Icons::PaintGear},
         { ID_HELP_MANUAL,             IDS_HELP_MANUAL,             Icons::PaintHelp},
         { ID_SEPARATOR,               {},{}},
+        { ID_CLEANUP_SMARTCLEAN,      IDS_SMARTCLEAN_BTN,          Icons::PaintSmartClean},
+        { ID_SEPARATOR,               {},{}},
         { ID_WATCHER_LABEL,           IDS_WATCHER,                 {}},
         { ID_WATCHER_START,           {},                          Icons::Char(L'▶', RGB( 50, 205,  50))},
         { ID_WATCHER_PAUSE,           {},                          Icons::PaintPause},
@@ -932,6 +935,11 @@ void CMainFrame::OnUpdateViewFontSize(CCmdUI* pCmdUI) const
 {
     const int percent = SizePercentFromCommand(pCmdUI->m_nID, ID_VIEW_FONT_SIZE_100);
     pCmdUI->SetRadio(COptions::FontSizePercent == percent);
+}
+
+void CMainFrame::OnSmartClean()
+{
+    CSmartCleanDlg().ShowModal();
 }
 
 void CMainFrame::OnConfigure()
