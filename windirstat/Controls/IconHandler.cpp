@@ -403,6 +403,46 @@ namespace Icons
         g.FillRectangle(&lineBrush, 28, 48, 24, 3);
     }
 
+    void PaintMigrateWeChat(Graphics& g)
+    {
+        // Speech bubble with a tail
+        const SolidBrush bubble(C(96, 174, 76));
+        g.FillEllipse(&bubble, 4, 4, 56, 42);
+        const Point tail[] = { {16, 36}, {26, 58}, {32, 40} };
+        g.FillPolygon(&bubble, tail, static_cast<INT>(std::size(tail)));
+
+        // Chat dots
+        const SolidBrush dots(C(255, 255, 255));
+        g.FillEllipse(&dots, 17, 18, 9, 12);
+        g.FillEllipse(&dots, 34, 18, 9, 12);
+        g.FillEllipse(&dots, 25, 32, 9, 12);
+
+        // Move arrow accent
+        const SolidBrush arrow(C(0, 130, 220));
+        const Point arrowShape[] = { {44, 46}, {60, 46}, {60, 40}, {44, 40} };
+        g.FillPolygon(&arrow, arrowShape, static_cast<INT>(std::size(arrowShape)));
+    }
+
+    void PaintMigrateWps(Graphics& g)
+    {
+        // Cloud silhouette
+        const SolidBrush cloud(C(0, 130, 220));
+        g.FillEllipse(&cloud, 4, 26, 30, 24);
+        g.FillEllipse(&cloud, 18, 12, 32, 28);
+        g.FillEllipse(&cloud, 36, 24, 24, 24);
+        g.FillRectangle(&cloud, 17, 36, 30, 12);
+
+        // Small document being moved onto the cloud
+        const SolidBrush paper(C(255, 255, 255));
+        const Pen outline(Neutral(), 3);
+        const Point sheet[] = { {30, 30}, {48, 30}, {54, 36}, {54, 56}, {30, 56} };
+        g.FillPolygon(&paper, sheet, static_cast<INT>(std::size(sheet)));
+        g.DrawPolygon(&outline, sheet, static_cast<INT>(std::size(sheet)));
+        const SolidBrush lines(C(0, 102, 204));
+        g.FillRectangle(&lines, 34, 42, 16, 3);
+        g.FillRectangle(&lines, 34, 48, 16, 3);
+    }
+
     void PaintFilter(Graphics& g, const bool active)
     {
         const Point funnelShape[] = { {8, 6}, {56, 6}, {56, 14}, {38, 34}, {38, 56}, {26, 52}, {26, 34}, {8, 14} };

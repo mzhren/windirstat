@@ -6,6 +6,7 @@
 
 #include "pch.h"
 #include "FileInfoView.h"
+#include "AppMigrate.h"
 
 namespace
 {
@@ -142,59 +143,6 @@ std::wstring CFileInfoView::MigratableHint(const CItem* item) const
         return Localization::Lookup(IDS_INFO_MIGRATE_WPS);
     }
     return {};
-}
-
-bool CFileInfoView::CreateDirectoryJunction(const std::wstring& linkPath, const std::wstring& targetPath)
-{
-    if (linkPath.empty() || targetPath.empty()) return false;
-    if (!CreateDirectoryW(linkPath.c_str(), nullptr)) return false;
-
-    const HANDLE handle = CreateFileW(linkPath.c_str(), GENERIC_WRITE, FILE_SHARE_READ, nullptr,
-        OPEN_EXISTING, FILE_FLAG_OPEN_REPARSE_POINT | FILE_FLAG_BACKUP_SEMANTICS, nullptr);
-    if (handle == INVALID_HANDLE_VALUE)
-    {
-        RemoveDirectoryW(linkPath.c_str());
-        return false;
-    }
-
-    struct MountPointHeader
-    {
-        DWORD ReparseTag;
-        WORD ReparseDataLength;
-        WORD Reserved;
-        WORD SubstituteNameOffset;
-        WORD SubstituteNameLength;
-        WORD PrintNameOffset;
-        WORD PrintNameLength;
-    };
-
-    // The substitute name must be an absolute path in the \??\ namespace;
-    // a trailing backslash mirrors what mklink /J stores.
-    const std::wstring substitute = L"\\??\\" + targetPath + L"\\";
-    const std::wstring printName = targetPath;
-    const size_t substituteBytes = substitute.size() * sizeof(WCHAR);
-    const size_t printBytes = printName.size() * sizeof(WCHAR);
-
-    std::vector<BYTE> buffer(sizeof(MountPointHeader) + substituteBytes + sizeof(WCHAR) + printBytes + sizeof(WCHAR));
-    auto* mountPoint = reinterpret_cast<MountPointHeader*>(buffer.data());
-    mountPoint->ReparseTag = IO_REPARSE_TAG_MOUNT_POINT;
-    mountPoint->Reserved = 0;
-    mountPoint->SubstituteNameOffset = 0;
-    mountPoint->SubstituteNameLength = static_cast<WORD>(substituteBytes);
-    mountPoint->PrintNameOffset = static_cast<WORD>(substituteBytes + sizeof(WCHAR));
-    mountPoint->PrintNameLength = static_cast<WORD>(printBytes);
-    mountPoint->ReparseDataLength = static_cast<WORD>(sizeof(MountPointHeader) - offsetof(MountPointHeader, SubstituteNameOffset) +
-        substituteBytes + sizeof(WCHAR) + printBytes + sizeof(WCHAR));
-    memcpy(buffer.data() + sizeof(MountPointHeader), substitute.c_str(), substituteBytes + sizeof(WCHAR));
-    memcpy(buffer.data() + sizeof(MountPointHeader) + substituteBytes + sizeof(WCHAR),
-        printName.c_str(), printBytes + sizeof(WCHAR));
-
-    DWORD returned = 0;
-    const bool ok = DeviceIoControl(handle, FSCTL_SET_REPARSE_POINT, buffer.data(),
-        static_cast<DWORD>(buffer.size()), nullptr, 0, &returned, nullptr) != FALSE;
-    CloseHandle(handle);
-    if (!ok) RemoveDirectoryW(linkPath.c_str());
-    return ok;
 }
 
 void CFileInfoView::RefreshInfo()
@@ -496,7 +444,7 @@ void CFileInfoView::OnMigrate()
         MessageBoxW(GetMainWindowHandle(), Localization::Lookup(IDS_INFO_MIGRATE_LOCKED).c_str(),
             GetAppTitle().c_str(), MB_OK | MB_ICONWARNING);
     }
-    else if (CreateDirectoryJunction(source, destPath))
+    else if (AppMigrate::CreateDirectoryJunction(source, destPath))
     {
         MessageBoxW(GetMainWindowHandle(), Localization::Format(IDS_INFO_MIGRATE_DONE, destPath).c_str(),
             GetAppTitle().c_str(), MB_OK | MB_ICONINFORMATION);

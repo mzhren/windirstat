@@ -30,6 +30,7 @@
 #define IDD_CLOUD_CONNECTION            123
 #define IDD_SMARTCLEAN                  126
 #define IDD_DUPLICATECLEAN              127
+#define IDD_APPMIGRATE                  128
 #define IDC_SMARTCLEAN_LIST             1240
 #define IDC_SMARTCLEAN_DESC             1241
 #define IDC_SMARTCLEAN_STATUS           1242
@@ -44,6 +45,14 @@
 #define IDC_DUPCLEAN_SELECTALL          1254
 #define IDC_DUPCLEAN_SCAN               1255
 #define IDC_DUPCLEAN_CLEAN              1256
+#define IDC_APPMIGRATE_LIST             1260
+#define IDC_APPMIGRATE_DESC             1261
+#define IDC_APPMIGRATE_STATUS           1262
+#define IDC_APPMIGRATE_NOTE             1263
+#define IDC_APPMIGRATE_PICKDEST         1264
+#define IDC_APPMIGRATE_DESTPATH         1265
+#define IDC_APPMIGRATE_MIGRATE          1266
+#define IDC_APPMIGRATE_DESTLABEL        1267
 #define IDC_ADD_CLEANUP                 1000
 #define IDC_ADD_FOLDER                  1001
 #define IDC_ASKFORCONFIRMATION          1002
@@ -449,6 +458,8 @@
 #define ID_FILE_SELECT_CLOUD            32969
 #define ID_CLEANUP_SMARTCLEAN           32971
 #define ID_CLEANUP_DUPCLEAN             32972
+#define ID_CLEANUP_MIGRATE_WECHAT       32973
+#define ID_CLEANUP_MIGRATE_WPS          32974
 #define IDS_APP_TITLE                   57344
 #define IDS_AUTHOR_EMAIL                57345
 #define IDS_FILTER_EXAMPLE_DIRS         57346
@@ -463,9 +474,9 @@
 //
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        128
-#define _APS_NEXT_COMMAND_VALUE         32973
-#define _APS_NEXT_CONTROL_VALUE         1257
+#define _APS_NEXT_RESOURCE_VALUE        129
+#define _APS_NEXT_COMMAND_VALUE         32975
+#define _APS_NEXT_CONTROL_VALUE         1268
 #define _APS_NEXT_SYMED_VALUE           126
 #endif
 #endif

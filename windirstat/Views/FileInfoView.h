@@ -72,7 +72,6 @@ protected:
     Protection ClassifyProtection(const CItem* item, DWORD attributes) const;
     std::wstring MigratableHint(const CItem* item) const;
     void OnMigrate();
-    static bool CreateDirectoryJunction(const std::wstring& linkPath, const std::wstring& targetPath);
 
     bool m_show = true;            // Whether this pane is shown (F8 option)
     CItem* m_item = nullptr;       // Item described by the pane (first selection)
