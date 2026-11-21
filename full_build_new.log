@@ -1,0 +1,634 @@
+Please choose a release type:
+1. Beta
+2. Production
+Enter Choice: [1,2]?1
+**********************************************************************
+** Visual Studio 2022 Developer Command Prompt v17.14.44
+** Copyright (c) 2025 Microsoft Corporation
+**********************************************************************
+适用于 .NET Framework MSBuild 版本 17.14.60+43b635718
+生成启动时间为 2026/11/21 18:30:32。
+
+项目“E:\projects\opensource\windirstat\windirstat.sln”在节点 1 上(Clean;Build 个目标)。
+ValidateSolutionConfiguration:
+  正在生成解决方案配置“Release|Win32”。
+项目“E:\projects\opensource\windirstat\windirstat.sln”(1)正在节点 1 上生成“E:\projects\opensource\windirstat\windirstat\windirstat.vcxproj”(2) (Clean 个目标)。
+GetGitRevision:
+  18b71f88758ff2cc5bc6361af7ce53c38be0ad73
+  Retrieved for HEAD $(GitRevision) = '18b71f88758ff2cc5bc6361af7ce53c38be0ad73'.
+GetGitDate:
+  2026-11-21
+  Retrieved date for last commit $(GitDate) = '2026-11-21'.
+GetGitCount:
+  2219
+  Retrieved for $(GitCount) = '2219'.
+_PrepareForClean:
+  正在删除文件“E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\windirstat.tlog\windirstat.lastbuildstate”。
+已完成生成项目“E:\projects\opensource\windirstat\windirstat\windirstat.vcxproj”(Clean 个目标)的操作。
+项目“E:\projects\opensource\windirstat\windirstat.sln”(1)正在节点 1 上生成“E:\projects\opensource\windirstat\windirstat\windirstat.vcxproj”(2:2) (默认目标)。
+DownloadWslHeaders:
+  "C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "E:\projects\opensource\windirstat\windirstat\Build\Download Linux Headers.ps1" -Path "E:\projects\opensource\windirstat\windirstat\..\contrib\linux-headers"
+PrepareForBuild:
+  已启用结构化输出。编译器诊断的格式设置将反映错误层次结构。有关详细信息，请参阅 https://aka.ms/cpp/structured-output。
+InitializeBuildStatus:
+  正在创建“E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\windirstat.tlog\unsuccessfulbuild”，因为已指定“AlwaysCreate”。
+  正在对“E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\windirstat.tlog\unsuccessfulbuild”执行 Touch 任务。
+PreBuildEvent:
+  POWERSHELL.EXE -NoLogo -ExecutionPolicy Unrestricted -NoProfile -File "E:\projects\opensource\windirstat\windirstat\Build\Format Sources.ps1" -Path "E:\projects\opensource\windirstat\windirstat\."
+  POWERSHELL.EXE -NoLogo -ExecutionPolicy Unrestricted -NoProfile -File "E:\projects\opensource\windirstat\windirstat\Build\Compress Strings.ps1" -Path "E:\projects\opensource\windirstat\windirstat\res"
+  :VCEnd
+  Normalizing source files
+  Compiling language resource
+  Generating language header file
+  Generating language resource
+ComputeCustomBuildOutput:
+  正在创建目录“E:\projects\opensource\windirstat\Build\Temp\WSL\Win32\Release\”。
+CustomBuild:
+  Building the x64 and ARM64 WSL runners
+ComputeStdModulesCompileInputs:
+  正在读取为库 'microsoft/STL'提供数据的库清单文件 'C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\modules\modules.json'。
+  正在从库“microsoft/STL”添加模块源“C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\modules\std.ixx”，以使用此项目生成。
+  正在从库“microsoft/STL”添加模块源“C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\modules\std.compat.ixx”，以使用此项目生成。
+ClCompile:
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\bin\HostX86\x86\CL.exe /c /IE:\projects\opensource\windirstat\ /IE:\projects\opensource\windirstat\windirstat\ /IE:\projects\opensource\windirstat\windirstat\Controls\ /IE:\projects\opensource\windirstat\windirstat\Dialogs\ /IE:\projects\opensource\windirstat\windirstat\Pages\ /IE:\projects\opensource\windirstat\windirstat\Views\ /IE:\projects\opensource\windirstat\windirstat\Res\ /Zi /nologo /W4 /WX- /diagnostics:column /MP /O2 /Oi /Ot /Oy /GL /D GIT_COUNT=2219 /D "GIT_DATE=\"2026-11-21\"" /D "GIT_COMMIT=\"18b71f88758ff2cc5bc6361af7ce53c38be0ad73\"" /D PRODUCTION=0 /D NDEBUG /D WINVER=_WIN32_WINNT_WIN7 /D _WIN32_WINNT=_WIN32_WINNT_WIN7 /D _UNICODE /D UNICODE /GF /Gm- /EHsc /MT /GS- /Gy /arch:SSE2 /fp:fast /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /std:c++23preview /Yc"pch.h" /Fp"E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\DiskSeek_x86.pch" /Fo"E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\\" /Fd"E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\vc143.pdb" /external:W4 /Gd /TP /wd4324 /wd6387 /wd4483 /analyze- /FC /errorReport:queue /utf-8 /Gw /GA /Ob3 /Zc:throwingNew /DPRODUCTION=0 pch.cpp
+  pch.cpp
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\bin\HostX86\x86\CL.exe /c /IE:\projects\opensource\windirstat\ /IE:\projects\opensource\windirstat\windirstat\ /IE:\projects\opensource\windirstat\windirstat\Controls\ /IE:\projects\opensource\windirstat\windirstat\Dialogs\ /IE:\projects\opensource\windirstat\windirstat\Pages\ /IE:\projects\opensource\windirstat\windirstat\Views\ /IE:\projects\opensource\windirstat\windirstat\Res\ /Zi /nologo /W4 /WX- /diagnostics:column /MP /O2 /Oi /Ot /Oy /GL /D GIT_COUNT=2219 /D "GIT_DATE=\"2026-11-21\"" /D "GIT_COMMIT=\"18b71f88758ff2cc5bc6361af7ce53c38be0ad73\"" /D PRODUCTION=0 /D NDEBUG /D WINVER=_WIN32_WINNT_WIN7 /D _WIN32_WINNT=_WIN32_WINNT_WIN7 /D _UNICODE /D UNICODE /GF /Gm- /EHsc /MT /GS- /Gy /arch:SSE2 /fp:fast /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /std:c++23preview /Yu"pch.h" /Fp"E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\DiskSeek_x86.pch" /Fo"E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\\" /Fd"E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\vc143.pdb" /external:W4 /Gd /TP /wd4324 /wd6387 /wd4483 /analyze- /FC /errorReport:queue /utf-8 /Gw /GA /Ob3 /Zc:throwingNew /DPRODUCTION=0 Controls\ExtensionListControl.cpp Controls\FileDupeControl.cpp Controls\FileTopControl.cpp Controls\FileTreeControl.cpp Controls\FilePermsControl.cpp Controls\FileWatcherControl.cpp Controls\WdsListControl.cpp Controls\PacMan.cpp Controls\DrawTextCache.cpp Controls\TreeListControl.cpp Controls\TreeMap.cpp Controls\TreeMapLayout.cpp Controls\HilbertMooreTreeMap.cpp Controls\FlameGraph.cpp Controls\Sunburst.cpp Controls\XYSlider.cpp CsvLoader.cpp DarkMode.cpp UiAppearance.cpp UiControls.cpp UiDialogs.cpp UiFramework.cpp Dialogs\MessageBoxDlg.cpp Dialogs\ProgressDlg.cpp WinDirStatModel.cpp WinDirStatModel.Actions.cpp Filtering.cpp Item.Extended.cpp Pages\PagePrompts.cpp Views\ControlView.cpp Controls\FileSearchControl.cpp FinderBasic.cpp FinderMtp.cpp FinderRemote.cpp FinderWsl.cpp StorageSource.cpp FinderNtfs.cpp RecoveryExFat.cpp RecoveryFat.cpp RecoveryNtfs.cpp RecoveryShared.cpp SmartClean.cpp DuplicateClean.cpp JianYingClean.cpp Dialogs\JianYingCleanDlg.cpp Dialogs\DonateDlg.cpp HelpersTasks.cpp HelpersInterface.cpp Item.cpp ItemDupe.cpp ItemPerm.cpp ItemSearch.cpp ItemTop.cpp Layout.cpp LayoutPopup.cpp Localization.cpp MainFrame.cpp MainFrame.Commands.cpp Options.cpp Pages\PageAdvanced.cpp Pages\PageCleanups.cpp Pages\PageFiltering.cpp Pages\PagePermissions.cpp Pages\PageGeneral.cpp Pages\PageFileTree.cpp Pages\PageShared.cpp Pages\PageTreeMap.cpp Property.cpp Dialogs\SearchDlg.cpp Dialogs\SmartCleanDlg.cpp Dialogs\DuplicateCleanDlg.cpp Dialogs\AppMigrateDlg.cpp Dialogs\RecoveryDlg.cpp Views\ExtensionView.cpp Views\FileInfoView.cpp Views\WinDirStatPane.cpp Views\GraphView.cpp Views\VisualizationPane.cpp Views\StorageAnalyticsView.cpp Views\FileTabbedView.cpp Views\FileTreeView.cpp Views\TreeMapView.cpp Views\FlameGraphView.cpp Views\SunburstView.cpp WinDirStat.cpp Controls\ColorButton.cpp Controls\IconHandler.cpp Dialogs\AboutDlg.cpp Dialogs\SelectDrivesDlg.cpp
+  ExtensionListControl.cpp
+  FileDupeControl.cpp
+  FileTopControl.cpp
+  FileTreeControl.cpp
+  FilePermsControl.cpp
+  FileWatcherControl.cpp
+  WdsListControl.cpp
+  PacMan.cpp
+  DrawTextCache.cpp
+  TreeListControl.cpp
+  TreeMap.cpp
+  TreeMapLayout.cpp
+  HilbertMooreTreeMap.cpp
+  FlameGraph.cpp
+  Sunburst.cpp
+  XYSlider.cpp
+  CsvLoader.cpp
+  DarkMode.cpp
+  UiAppearance.cpp
+  UiControls.cpp
+  UiDialogs.cpp
+  UiFramework.cpp
+  MessageBoxDlg.cpp
+  ProgressDlg.cpp
+  WinDirStatModel.cpp
+  WinDirStatModel.Actions.cpp
+  Filtering.cpp
+  Item.Extended.cpp
+  PagePrompts.cpp
+  ControlView.cpp
+  FileSearchControl.cpp
+  FinderBasic.cpp
+  FinderMtp.cpp
+  FinderRemote.cpp
+  FinderWsl.cpp
+  StorageSource.cpp
+  FinderNtfs.cpp
+  RecoveryExFat.cpp
+  RecoveryFat.cpp
+  RecoveryNtfs.cpp
+  RecoveryShared.cpp
+  SmartClean.cpp
+  DuplicateClean.cpp
+  JianYingClean.cpp
+  JianYingCleanDlg.cpp
+  DonateDlg.cpp
+  HelpersTasks.cpp
+  HelpersInterface.cpp
+  Item.cpp
+  ItemDupe.cpp
+  ItemPerm.cpp
+  ItemSearch.cpp
+  ItemTop.cpp
+  Layout.cpp
+E:\projects\opensource\windirstat\windirstat\SmartClean.cpp(505,62): warning C4100: 'state': 未引用的参数 [E:\projects\opensource\windirstat\windirstat\windirstat.vcxproj]
+  (编译源文件“/SmartClean.cpp”)
+  
+E:\projects\opensource\windirstat\windirstat\DuplicateClean.cpp(98,29): warning C4189: “i”: 局部变量已初始化但不引用 [E:\projects\opensource\windirstat\windirstat\windirstat.vcxproj]
+  (编译源文件“/DuplicateClean.cpp”)
+  
+  LayoutPopup.cpp
+  Localization.cpp
+  MainFrame.cpp
+  MainFrame.Commands.cpp
+E:\projects\opensource\windirstat\windirstat\SmartClean.cpp(735,1): warning C4010: 单行注释包含行继续符 [E:\projects\opensource\windirstat\windirstat\windirstat.vcxproj]
+  (编译源文件“/SmartClean.cpp”)
+  
+  Options.cpp
+  PageAdvanced.cpp
+  PageCleanups.cpp
+  PageFiltering.cpp
+  PagePermissions.cpp
+  PageGeneral.cpp
+  PageFileTree.cpp
+  PageShared.cpp
+  PageTreeMap.cpp
+  Property.cpp
+  SearchDlg.cpp
+  === M_MID after namespace open ===
+  === M_MID2 after enum ===
+  === M_END before RunMigration ===
+  SmartCleanDlg.cpp
+  DuplicateCleanDlg.cpp
+  AppMigrateDlg.cpp
+  RecoveryDlg.cpp
+  ExtensionView.cpp
+  FileInfoView.cpp
+  === M_MID after namespace open ===
+  === M_MID2 after enum ===
+  === M_MID after namespace open ===
+  === M_MID2 after enum ===
+  === M_END before RunMigration ===
+  === M_END before RunMigration ===
+  WinDirStatPane.cpp
+  GraphView.cpp
+  VisualizationPane.cpp
+  StorageAnalyticsView.cpp
+  FileTabbedView.cpp
+  FileTreeView.cpp
+  TreeMapView.cpp
+  FlameGraphView.cpp
+  SunburstView.cpp
+  WinDirStat.cpp
+  ColorButton.cpp
+  IconHandler.cpp
+  AboutDlg.cpp
+  SelectDrivesDlg.cpp
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\bin\HostX86\x86\CL.exe /c /IE:\projects\opensource\windirstat\ /IE:\projects\opensource\windirstat\windirstat\ /IE:\projects\opensource\windirstat\windirstat\Controls\ /IE:\projects\opensource\windirstat\windirstat\Dialogs\ /IE:\projects\opensource\windirstat\windirstat\Pages\ /IE:\projects\opensource\windirstat\windirstat\Views\ /IE:\projects\opensource\windirstat\windirstat\Res\ /Zi /nologo /W4 /WX- /diagnostics:column /MP /O2 /Oi /Ot /Oy /GL /D GIT_COUNT=2219 /D "GIT_DATE=\"2026-11-21\"" /D "GIT_COMMIT=\"18b71f88758ff2cc5bc6361af7ce53c38be0ad73\"" /D PRODUCTION=0 /D NDEBUG /D WINVER=_WIN32_WINNT_WIN7 /D _WIN32_WINNT=_WIN32_WINNT_WIN7 /D _UNICODE /D UNICODE /GF /Gm- /EHsc /MT /GS- /Gy /arch:SSE2 /fp:fast /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /std:c++23preview /Fo"E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\\" /Fd"E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\vc143.pdb" /external:W4 /Gd /TP /wd4324 /wd6387 /wd4483 /analyze- /FC /errorReport:queue /utf-8 /Gw /GA /Ob3 /Zc:throwingNew /DPRODUCTION=0 AppMigrate.cpp LegacyOsCompat.cpp
+  AppMigrate.cpp
+  LegacyOsCompat.cpp
+  === M_MID after namespace open ===
+  === M_MID2 after enum ===
+  === M_END before RunMigration ===
+E:\projects\opensource\windirstat\windirstat\AppMigrate.cpp(157,46): warning C4100: 'total': 未引用的参数 [E:\projects\opensource\windirstat\windirstat\windirstat.vcxproj]
+E:\projects\opensource\windirstat\windirstat\AppMigrate.cpp(198,29): warning C4189: “i”: 局部变量已初始化但不引用 [E:\projects\opensource\windirstat\windirstat\windirstat.vcxproj]
+E:\projects\opensource\windirstat\windirstat\AppMigrate.cpp(276,36): warning C4100: 'preset': 未引用的参数 [E:\projects\opensource\windirstat\windirstat\windirstat.vcxproj]
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\bin\HostX86\x86\CL.exe /c /IE:\projects\opensource\windirstat\ /IE:\projects\opensource\windirstat\windirstat\ /IE:\projects\opensource\windirstat\windirstat\Controls\ /IE:\projects\opensource\windirstat\windirstat\Dialogs\ /IE:\projects\opensource\windirstat\windirstat\Pages\ /IE:\projects\opensource\windirstat\windirstat\Views\ /IE:\projects\opensource\windirstat\windirstat\Res\ /Zi /nologo /W4 /WX- /diagnostics:column /MP /O2 /Oi /Ot /Oy /GL /D GIT_COUNT=2219 /D "GIT_DATE=\"2026-11-21\"" /D "GIT_COMMIT=\"18b71f88758ff2cc5bc6361af7ce53c38be0ad73\"" /D PRODUCTION=0 /D NDEBUG /D WINVER=_WIN32_WINNT_WIN7 /D _WIN32_WINNT=_WIN32_WINNT_WIN7 /D _UNICODE /D UNICODE /GF /Gm- /EHsc /MT /GS- /Gy /arch:SSE2 /fp:fast /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /std:c17 /Fo"E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\\" /Fd"E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\vc143.pdb" /external:W4 /Gd /TC /wd4324 /wd6387 /wd4483 /analyze- /FC /errorReport:queue /utf-8 /Gw /GA /Ob3 /Zc:throwingNew /DPRODUCTION=0 ..\contrib\xxhash\xxhash.c
+  xxhash.c
+ResourceCompile:
+  C:\Program Files (x86)\Windows Kits\10\bin\10.0.26100.0\x86\rc.exe /D GIT_COUNT=2219 /D "GIT_DATE=\"2026-11-21\"" /D "GIT_COMMIT=\"18b71f88758ff2cc5bc6361af7ce53c38be0ad73\"" /D PRODUCTION=0 /D ACTUAL_FILEFLAGS=0 /D NDEBUG /D WINVER=0x0601 /D _WIN32_WINNT=0x0601 /D _ALLOW_RTCc_IN_STL /D _UNICODE /D UNICODE /l"0x0409" /IE:\projects\opensource\windirstat\windirstat\..\Build\Temp\WSL\Win32\Release\ /I.. /I. /IControls /IDialogs /I.. /IE:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\ /nologo /fo"E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\windirstat.res" windirstat.rc 
+  C:\Program Files (x86)\Windows Kits\10\bin\10.0.26100.0\x86\rc.exe /D GIT_COUNT=2219 /D "GIT_DATE=\"2026-11-21\"" /D "GIT_COMMIT=\"18b71f88758ff2cc5bc6361af7ce53c38be0ad73\"" /D PRODUCTION=0 /D ACTUAL_FILEFLAGS=0 /D NDEBUG /D WINVER=0x0601 /D _WIN32_WINNT=0x0601 /D _ALLOW_RTCc_IN_STL /D _UNICODE /D UNICODE /l"0x0409" /IE:\projects\opensource\windirstat\windirstat\..\Build\Temp\WSL\Win32\Release\ /I.. /I. /IControls /IDialogs /I.. /IE:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\ /nologo /fo"E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\version.res" version.rc 
+Link:
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\bin\HostX86\x86\link.exe /ERRORREPORT:QUEUE /OUT:"E:\projects\opensource\windirstat\build\DiskSeek_x86.exe" /INCREMENTAL:NO /NOLOGO delayimp.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib Delayimp.lib /DELAYLOAD:bcrypt.dll /DELAYLOAD:comdlg32.dll /DELAYLOAD:crypt32.dll /DELAYLOAD:mpr.dll /DELAYLOAD:msimg32.dll /DELAYLOAD:oleaut32.dll /DELAYLOAD:powrprof.dll /DELAYLOAD:shlwapi.dll /DELAYLOAD:virtdisk.dll /DELAYLOAD:winhttp.dll /DELAYLOAD:xmllite.dll /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /manifestinput:res\windirstat.manifest /DEBUG /PDB:"E:\projects\opensource\windirstat\build\DiskSeek_x86.pdb" /SUBSYSTEM:WINDOWS /LARGEADDRESSAWARE /OPT:REF /OPT:ICF /LTCG /LTCGOUT:"E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\DiskSeek_x86.iobj" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"E:\projects\opensource\windirstat\build\DiskSeek_x86.lib" /MACHINE:X86 /SAFESEH /release /pdbaltpath:%_PDB% /release /OPT:ICF=8 E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\windirstat.res
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\version.res
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\ExtensionListControl.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\FileDupeControl.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\FileTopControl.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\FileTreeControl.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\FilePermsControl.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\FileWatcherControl.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\WdsListControl.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\PacMan.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\DrawTextCache.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\TreeListControl.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\TreeMap.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\TreeMapLayout.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\HilbertMooreTreeMap.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\FlameGraph.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\Sunburst.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\XYSlider.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\CsvLoader.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\DarkMode.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\UiAppearance.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\UiControls.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\UiDialogs.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\UiFramework.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\MessageBoxDlg.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\ProgressDlg.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\WinDirStatModel.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\WinDirStatModel.Actions.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\Filtering.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\Item.Extended.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\PagePrompts.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\ControlView.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\FileSearchControl.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\FinderBasic.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\FinderMtp.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\FinderRemote.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\FinderWsl.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\StorageSource.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\FinderNtfs.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\RecoveryExFat.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\RecoveryFat.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\RecoveryNtfs.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\RecoveryShared.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\SmartClean.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\DuplicateClean.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\AppMigrate.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\JianYingClean.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\JianYingCleanDlg.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\DonateDlg.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\HelpersTasks.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\xxhash.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\LegacyOsCompat.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\HelpersInterface.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\Item.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\ItemDupe.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\ItemPerm.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\ItemSearch.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\ItemTop.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\Layout.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\LayoutPopup.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\Localization.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\MainFrame.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\MainFrame.Commands.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\Options.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\PageAdvanced.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\PageCleanups.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\PageFiltering.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\PagePermissions.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\PageGeneral.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\PageFileTree.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\PageShared.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\PageTreeMap.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\Property.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\SearchDlg.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\SmartCleanDlg.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\DuplicateCleanDlg.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\AppMigrateDlg.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\RecoveryDlg.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\pch.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\ExtensionView.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\FileInfoView.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\WinDirStatPane.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\GraphView.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\VisualizationPane.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\StorageAnalyticsView.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\FileTabbedView.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\FileTreeView.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\TreeMapView.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\FlameGraphView.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\SunburstView.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\WinDirStat.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\ColorButton.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\IconHandler.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\AboutDlg.obj
+  E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\SelectDrivesDlg.obj
+  正在生成代码
+  已完成代码的生成
+  windirstat.vcxproj -> E:\projects\opensource\windirstat\build\DiskSeek_x86.exe
+FinalizeBuildStatus:
+  正在删除文件“E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\windirstat.tlog\unsuccessfulbuild”。
+  正在对“E:\projects\opensource\windirstat\intermediate\Win32_Release\windirstat\windirstat.tlog\windirstat.lastbuildstate”执行 Touch 任务。
+已完成生成项目“E:\projects\opensource\windirstat\windirstat\windirstat.vcxproj”(默认目标)的操作。
+已完成生成项目“E:\projects\opensource\windirstat\windirstat.sln”(Clean;Build 个目标)的操作。
+
+已成功生成。
+
+“E:\projects\opensource\windirstat\windirstat.sln”(Clean;Build 目标) (1) ->
+“E:\projects\opensource\windirstat\windirstat\windirstat.vcxproj”(默认目标) (2:2) ->
+(ClCompile 目标) -> 
+  E:\projects\opensource\windirstat\windirstat\SmartClean.cpp(505,62): warning C4100: 'state': 未引用的参数 [E:\projects\opensource\windirstat\windirstat\windirstat.vcxproj]
+  E:\projects\opensource\windirstat\windirstat\DuplicateClean.cpp(98,29): warning C4189: “i”: 局部变量已初始化但不引用 [E:\projects\opensource\windirstat\windirstat\windirstat.vcxproj]
+  E:\projects\opensource\windirstat\windirstat\SmartClean.cpp(735,1): warning C4010: 单行注释包含行继续符 [E:\projects\opensource\windirstat\windirstat\windirstat.vcxproj]
+
+
+“E:\projects\opensource\windirstat\windirstat.sln”(Clean;Build 目标) (1) ->
+“E:\projects\opensource\windirstat\windirstat\windirstat.vcxproj”(默认目标) (2:2) ->
+  E:\projects\opensource\windirstat\windirstat\AppMigrate.cpp(157,46): warning C4100: 'total': 未引用的参数 [E:\projects\opensource\windirstat\windirstat\windirstat.vcxproj]
+  E:\projects\opensource\windirstat\windirstat\AppMigrate.cpp(198,29): warning C4189: “i”: 局部变量已初始化但不引用 [E:\projects\opensource\windirstat\windirstat\windirstat.vcxproj]
+  E:\projects\opensource\windirstat\windirstat\AppMigrate.cpp(276,36): warning C4100: 'preset': 未引用的参数 [E:\projects\opensource\windirstat\windirstat\windirstat.vcxproj]
+
+    6 个警告
+    0 个错误
+
+已用时间 00:00:27.58
+适用于 .NET Framework MSBuild 版本 17.14.60+43b635718
+生成启动时间为 2026/11/21 18:31:00。
+
+项目“E:\projects\opensource\windirstat\windirstat.sln”在节点 1 上(Clean;Build 个目标)。
+ValidateSolutionConfiguration:
+  正在生成解决方案配置“Release|x64”。
+项目“E:\projects\opensource\windirstat\windirstat.sln”(1)正在节点 1 上生成“E:\projects\opensource\windirstat\windirstat\windirstat.vcxproj”(2) (Clean 个目标)。
+GetGitRevision:
+  18b71f88758ff2cc5bc6361af7ce53c38be0ad73
+  Retrieved for HEAD $(GitRevision) = '18b71f88758ff2cc5bc6361af7ce53c38be0ad73'.
+GetGitDate:
+  2026-11-21
+  Retrieved date for last commit $(GitDate) = '2026-11-21'.
+GetGitCount:
+  2219
+  Retrieved for $(GitCount) = '2219'.
+_PrepareForClean:
+  正在删除文件“E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\windirstat.tlog\windirstat.lastbuildstate”。
+已完成生成项目“E:\projects\opensource\windirstat\windirstat\windirstat.vcxproj”(Clean 个目标)的操作。
+项目“E:\projects\opensource\windirstat\windirstat.sln”(1)正在节点 1 上生成“E:\projects\opensource\windirstat\windirstat\windirstat.vcxproj”(2:2) (默认目标)。
+DownloadWslHeaders:
+  "C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "E:\projects\opensource\windirstat\windirstat\Build\Download Linux Headers.ps1" -Path "E:\projects\opensource\windirstat\windirstat\..\contrib\linux-headers"
+PrepareForBuild:
+  已启用结构化输出。编译器诊断的格式设置将反映错误层次结构。有关详细信息，请参阅 https://aka.ms/cpp/structured-output。
+InitializeBuildStatus:
+  正在创建“E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\windirstat.tlog\unsuccessfulbuild”，因为已指定“AlwaysCreate”。
+  正在对“E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\windirstat.tlog\unsuccessfulbuild”执行 Touch 任务。
+PreBuildEvent:
+  POWERSHELL.EXE -NoLogo -ExecutionPolicy Unrestricted -NoProfile -File "E:\projects\opensource\windirstat\windirstat\Build\Format Sources.ps1" -Path "E:\projects\opensource\windirstat\windirstat\."
+  POWERSHELL.EXE -NoLogo -ExecutionPolicy Unrestricted -NoProfile -File "E:\projects\opensource\windirstat\windirstat\Build\Compress Strings.ps1" -Path "E:\projects\opensource\windirstat\windirstat\res"
+  :VCEnd
+  Normalizing source files
+  Compiling language resource
+  Generating language header file
+  Generating language resource
+ComputeCustomBuildOutput:
+  正在创建目录“E:\projects\opensource\windirstat\Build\Temp\WSL\x64\Release\”。
+CustomBuild:
+  Building the x64 and ARM64 WSL runners
+ComputeStdModulesCompileInputs:
+  正在读取为库 'microsoft/STL'提供数据的库清单文件 'C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\modules\modules.json'。
+  正在从库“microsoft/STL”添加模块源“C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\modules\std.ixx”，以使用此项目生成。
+  正在从库“microsoft/STL”添加模块源“C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\modules\std.compat.ixx”，以使用此项目生成。
+ClCompile:
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\bin\HostX64\x64\CL.exe /c /IE:\projects\opensource\windirstat\ /IE:\projects\opensource\windirstat\windirstat\ /IE:\projects\opensource\windirstat\windirstat\Controls\ /IE:\projects\opensource\windirstat\windirstat\Dialogs\ /IE:\projects\opensource\windirstat\windirstat\Pages\ /IE:\projects\opensource\windirstat\windirstat\Views\ /IE:\projects\opensource\windirstat\windirstat\Res\ /Zi /nologo /W4 /WX- /diagnostics:column /MP /O2 /Oi /Ot /Oy /GL /D GIT_COUNT=2219 /D "GIT_DATE=\"2026-11-21\"" /D "GIT_COMMIT=\"18b71f88758ff2cc5bc6361af7ce53c38be0ad73\"" /D PRODUCTION=0 /D NDEBUG /D WINVER=_WIN32_WINNT_WIN7 /D _WIN32_WINNT=_WIN32_WINNT_WIN7 /D _UNICODE /D UNICODE /GF /Gm- /EHsc /MT /GS- /Gy /fp:fast /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /std:c++23preview /Yc"pch.h" /Fp"E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\DiskSeek_x64.pch" /Fo"E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\\" /Fd"E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\vc143.pdb" /external:W4 /Gd /TP /wd4324 /wd6387 /wd4483 /FC /errorReport:queue /utf-8 /Gw /GA /Ob3 /Zc:throwingNew /DPRODUCTION=0 pch.cpp
+  pch.cpp
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\bin\HostX64\x64\CL.exe /c /IE:\projects\opensource\windirstat\ /IE:\projects\opensource\windirstat\windirstat\ /IE:\projects\opensource\windirstat\windirstat\Controls\ /IE:\projects\opensource\windirstat\windirstat\Dialogs\ /IE:\projects\opensource\windirstat\windirstat\Pages\ /IE:\projects\opensource\windirstat\windirstat\Views\ /IE:\projects\opensource\windirstat\windirstat\Res\ /Zi /nologo /W4 /WX- /diagnostics:column /MP /O2 /Oi /Ot /Oy /GL /D GIT_COUNT=2219 /D "GIT_DATE=\"2026-11-21\"" /D "GIT_COMMIT=\"18b71f88758ff2cc5bc6361af7ce53c38be0ad73\"" /D PRODUCTION=0 /D NDEBUG /D WINVER=_WIN32_WINNT_WIN7 /D _WIN32_WINNT=_WIN32_WINNT_WIN7 /D _UNICODE /D UNICODE /GF /Gm- /EHsc /MT /GS- /Gy /fp:fast /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /std:c++23preview /Yu"pch.h" /Fp"E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\DiskSeek_x64.pch" /Fo"E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\\" /Fd"E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\vc143.pdb" /external:W4 /Gd /TP /wd4324 /wd6387 /wd4483 /FC /errorReport:queue /utf-8 /Gw /GA /Ob3 /Zc:throwingNew /DPRODUCTION=0 Controls\ExtensionListControl.cpp Controls\FileDupeControl.cpp Controls\FileTopControl.cpp Controls\FileTreeControl.cpp Controls\FilePermsControl.cpp Controls\FileWatcherControl.cpp Controls\WdsListControl.cpp Controls\PacMan.cpp Controls\DrawTextCache.cpp Controls\TreeListControl.cpp Controls\TreeMap.cpp Controls\TreeMapLayout.cpp Controls\HilbertMooreTreeMap.cpp Controls\FlameGraph.cpp Controls\Sunburst.cpp Controls\XYSlider.cpp CsvLoader.cpp DarkMode.cpp UiAppearance.cpp UiControls.cpp UiDialogs.cpp UiFramework.cpp Dialogs\MessageBoxDlg.cpp Dialogs\ProgressDlg.cpp WinDirStatModel.cpp WinDirStatModel.Actions.cpp Filtering.cpp Item.Extended.cpp Pages\PagePrompts.cpp Views\ControlView.cpp Controls\FileSearchControl.cpp FinderBasic.cpp FinderMtp.cpp FinderRemote.cpp FinderWsl.cpp StorageSource.cpp FinderNtfs.cpp RecoveryExFat.cpp RecoveryFat.cpp RecoveryNtfs.cpp RecoveryShared.cpp SmartClean.cpp DuplicateClean.cpp JianYingClean.cpp Dialogs\JianYingCleanDlg.cpp Dialogs\DonateDlg.cpp HelpersTasks.cpp HelpersInterface.cpp Item.cpp ItemDupe.cpp ItemPerm.cpp ItemSearch.cpp ItemTop.cpp Layout.cpp LayoutPopup.cpp Localization.cpp MainFrame.cpp MainFrame.Commands.cpp Options.cpp Pages\PageAdvanced.cpp Pages\PageCleanups.cpp Pages\PageFiltering.cpp Pages\PagePermissions.cpp Pages\PageGeneral.cpp Pages\PageFileTree.cpp Pages\PageShared.cpp Pages\PageTreeMap.cpp Property.cpp Dialogs\SearchDlg.cpp Dialogs\SmartCleanDlg.cpp Dialogs\DuplicateCleanDlg.cpp Dialogs\AppMigrateDlg.cpp Dialogs\RecoveryDlg.cpp Views\ExtensionView.cpp Views\FileInfoView.cpp Views\WinDirStatPane.cpp Views\GraphView.cpp Views\VisualizationPane.cpp Views\StorageAnalyticsView.cpp Views\FileTabbedView.cpp Views\FileTreeView.cpp Views\TreeMapView.cpp Views\FlameGraphView.cpp Views\SunburstView.cpp WinDirStat.cpp Controls\ColorButton.cpp Controls\IconHandler.cpp Dialogs\AboutDlg.cpp Dialogs\SelectDrivesDlg.cpp
+  ExtensionListControl.cpp
+  FileDupeControl.cpp
+  FileTopControl.cpp
+  FileTreeControl.cpp
+  FilePermsControl.cpp
+  FileWatcherControl.cpp
+  WdsListControl.cpp
+  PacMan.cpp
+  DrawTextCache.cpp
+  TreeListControl.cpp
+  TreeMap.cpp
+  TreeMapLayout.cpp
+  HilbertMooreTreeMap.cpp
+  FlameGraph.cpp
+  Sunburst.cpp
+  XYSlider.cpp
+  CsvLoader.cpp
+  DarkMode.cpp
+  UiAppearance.cpp
+  UiControls.cpp
+  UiDialogs.cpp
+  UiFramework.cpp
+  MessageBoxDlg.cpp
+  ProgressDlg.cpp
+  WinDirStatModel.cpp
+  WinDirStatModel.Actions.cpp
+  Filtering.cpp
+  Item.Extended.cpp
+  PagePrompts.cpp
+  ControlView.cpp
+  FileSearchControl.cpp
+  FinderBasic.cpp
+  FinderMtp.cpp
+  FinderRemote.cpp
+  FinderWsl.cpp
+  StorageSource.cpp
+  FinderNtfs.cpp
+  RecoveryExFat.cpp
+  RecoveryFat.cpp
+  RecoveryNtfs.cpp
+  RecoveryShared.cpp
+  SmartClean.cpp
+  DuplicateClean.cpp
+  JianYingClean.cpp
+  JianYingCleanDlg.cpp
+  DonateDlg.cpp
+  HelpersTasks.cpp
+  HelpersInterface.cpp
+  Item.cpp
+  ItemDupe.cpp
+  ItemPerm.cpp
+  ItemSearch.cpp
+  ItemTop.cpp
+  Layout.cpp
+E:\projects\opensource\windirstat\windirstat\SmartClean.cpp(505,62): warning C4100: 'state': 未引用的参数 [E:\projects\opensource\windirstat\windirstat\windirstat.vcxproj]
+  (编译源文件“/SmartClean.cpp”)
+  
+E:\projects\opensource\windirstat\windirstat\DuplicateClean.cpp(98,29): warning C4189: “i”: 局部变量已初始化但不引用 [E:\projects\opensource\windirstat\windirstat\windirstat.vcxproj]
+  (编译源文件“/DuplicateClean.cpp”)
+  
+  LayoutPopup.cpp
+  Localization.cpp
+  MainFrame.cpp
+  MainFrame.Commands.cpp
+  Options.cpp
+  PageAdvanced.cpp
+  PageCleanups.cpp
+E:\projects\opensource\windirstat\windirstat\SmartClean.cpp(735,1): warning C4010: 单行注释包含行继续符 [E:\projects\opensource\windirstat\windirstat\windirstat.vcxproj]
+  (编译源文件“/SmartClean.cpp”)
+  
+  PageFiltering.cpp
+  PagePermissions.cpp
+  PageGeneral.cpp
+  PageFileTree.cpp
+  PageShared.cpp
+  PageTreeMap.cpp
+  Property.cpp
+  SearchDlg.cpp
+  SmartCleanDlg.cpp
+  === M_MID after namespace open ===
+  === M_MID2 after enum ===
+  === M_END before RunMigration ===
+  DuplicateCleanDlg.cpp
+  AppMigrateDlg.cpp
+  === M_MID after namespace open ===
+  === M_MID2 after enum ===
+  RecoveryDlg.cpp
+  ExtensionView.cpp
+  === M_END before RunMigration ===
+  FileInfoView.cpp
+  WinDirStatPane.cpp
+  GraphView.cpp
+  VisualizationPane.cpp
+  StorageAnalyticsView.cpp
+  === M_MID after namespace open ===
+  === M_MID2 after enum ===
+  FileTabbedView.cpp
+  === M_END before RunMigration ===
+  FileTreeView.cpp
+  TreeMapView.cpp
+  FlameGraphView.cpp
+  SunburstView.cpp
+  WinDirStat.cpp
+  ColorButton.cpp
+  IconHandler.cpp
+  AboutDlg.cpp
+  SelectDrivesDlg.cpp
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\bin\HostX64\x64\CL.exe /c /IE:\projects\opensource\windirstat\ /IE:\projects\opensource\windirstat\windirstat\ /IE:\projects\opensource\windirstat\windirstat\Controls\ /IE:\projects\opensource\windirstat\windirstat\Dialogs\ /IE:\projects\opensource\windirstat\windirstat\Pages\ /IE:\projects\opensource\windirstat\windirstat\Views\ /IE:\projects\opensource\windirstat\windirstat\Res\ /Zi /nologo /W4 /WX- /diagnostics:column /MP /O2 /Oi /Ot /Oy /GL /D GIT_COUNT=2219 /D "GIT_DATE=\"2026-11-21\"" /D "GIT_COMMIT=\"18b71f88758ff2cc5bc6361af7ce53c38be0ad73\"" /D PRODUCTION=0 /D NDEBUG /D WINVER=_WIN32_WINNT_WIN7 /D _WIN32_WINNT=_WIN32_WINNT_WIN7 /D _UNICODE /D UNICODE /GF /Gm- /EHsc /MT /GS- /Gy /fp:fast /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /std:c++23preview /Fo"E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\\" /Fd"E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\vc143.pdb" /external:W4 /Gd /TP /wd4324 /wd6387 /wd4483 /FC /errorReport:queue /utf-8 /Gw /GA /Ob3 /Zc:throwingNew /DPRODUCTION=0 AppMigrate.cpp LegacyOsCompat.cpp
+  AppMigrate.cpp
+  LegacyOsCompat.cpp
+  === M_MID after namespace open ===
+  === M_MID2 after enum ===
+  === M_END before RunMigration ===
+E:\projects\opensource\windirstat\windirstat\AppMigrate.cpp(157,46): warning C4100: 'total': 未引用的参数 [E:\projects\opensource\windirstat\windirstat\windirstat.vcxproj]
+E:\projects\opensource\windirstat\windirstat\AppMigrate.cpp(198,29): warning C4189: “i”: 局部变量已初始化但不引用 [E:\projects\opensource\windirstat\windirstat\windirstat.vcxproj]
+E:\projects\opensource\windirstat\windirstat\AppMigrate.cpp(276,36): warning C4100: 'preset': 未引用的参数 [E:\projects\opensource\windirstat\windirstat\windirstat.vcxproj]
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\bin\HostX64\x64\CL.exe /c /IE:\projects\opensource\windirstat\ /IE:\projects\opensource\windirstat\windirstat\ /IE:\projects\opensource\windirstat\windirstat\Controls\ /IE:\projects\opensource\windirstat\windirstat\Dialogs\ /IE:\projects\opensource\windirstat\windirstat\Pages\ /IE:\projects\opensource\windirstat\windirstat\Views\ /IE:\projects\opensource\windirstat\windirstat\Res\ /Zi /nologo /W4 /WX- /diagnostics:column /MP /O2 /Oi /Ot /Oy /GL /D GIT_COUNT=2219 /D "GIT_DATE=\"2026-11-21\"" /D "GIT_COMMIT=\"18b71f88758ff2cc5bc6361af7ce53c38be0ad73\"" /D PRODUCTION=0 /D NDEBUG /D WINVER=_WIN32_WINNT_WIN7 /D _WIN32_WINNT=_WIN32_WINNT_WIN7 /D _UNICODE /D UNICODE /GF /Gm- /EHsc /MT /GS- /Gy /fp:fast /Zc:wchar_t /Zc:forScope /Zc:inline /GR- /std:c17 /Fo"E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\\" /Fd"E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\vc143.pdb" /external:W4 /Gd /TC /wd4324 /wd6387 /wd4483 /FC /errorReport:queue /utf-8 /Gw /GA /Ob3 /Zc:throwingNew /DPRODUCTION=0 ..\contrib\xxhash\xxhash.c
+  xxhash.c
+ResourceCompile:
+  C:\Program Files (x86)\Windows Kits\10\bin\10.0.26100.0\x64\rc.exe /D GIT_COUNT=2219 /D "GIT_DATE=\"2026-11-21\"" /D "GIT_COMMIT=\"18b71f88758ff2cc5bc6361af7ce53c38be0ad73\"" /D PRODUCTION=0 /D ACTUAL_FILEFLAGS=0 /D NDEBUG /D WINVER=0x0601 /D _WIN32_WINNT=0x0601 /D _ALLOW_RTCc_IN_STL /D _UNICODE /D UNICODE /l"0x0409" /IE:\projects\opensource\windirstat\windirstat\..\Build\Temp\WSL\x64\Release\ /I.. /I. /IControls /IDialogs /I.. /IE:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\ /nologo /fo"E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\windirstat.res" windirstat.rc 
+  C:\Program Files (x86)\Windows Kits\10\bin\10.0.26100.0\x64\rc.exe /D GIT_COUNT=2219 /D "GIT_DATE=\"2026-11-21\"" /D "GIT_COMMIT=\"18b71f88758ff2cc5bc6361af7ce53c38be0ad73\"" /D PRODUCTION=0 /D ACTUAL_FILEFLAGS=0 /D NDEBUG /D WINVER=0x0601 /D _WIN32_WINNT=0x0601 /D _ALLOW_RTCc_IN_STL /D _UNICODE /D UNICODE /l"0x0409" /IE:\projects\opensource\windirstat\windirstat\..\Build\Temp\WSL\x64\Release\ /I.. /I. /IControls /IDialogs /I.. /IE:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\ /nologo /fo"E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\version.res" version.rc 
+Link:
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\bin\HostX64\x64\link.exe /ERRORREPORT:QUEUE /OUT:"E:\projects\opensource\windirstat\build\DiskSeek_x64.exe" /INCREMENTAL:NO /NOLOGO delayimp.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib Delayimp.lib /DELAYLOAD:bcrypt.dll /DELAYLOAD:comdlg32.dll /DELAYLOAD:crypt32.dll /DELAYLOAD:mpr.dll /DELAYLOAD:msimg32.dll /DELAYLOAD:oleaut32.dll /DELAYLOAD:powrprof.dll /DELAYLOAD:shlwapi.dll /DELAYLOAD:virtdisk.dll /DELAYLOAD:winhttp.dll /DELAYLOAD:xmllite.dll /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /manifestinput:res\windirstat.manifest /DEBUG /PDB:"E:\projects\opensource\windirstat\build\DiskSeek_x64.pdb" /SUBSYSTEM:WINDOWS /LARGEADDRESSAWARE /OPT:REF /OPT:ICF /LTCG /LTCGOUT:"E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\DiskSeek_x64.iobj" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"E:\projects\opensource\windirstat\build\DiskSeek_x64.lib" /MACHINE:X64 /release /pdbaltpath:%_PDB% /release /OPT:ICF=8 E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\windirstat.res
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\version.res
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\ExtensionListControl.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\FileDupeControl.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\FileTopControl.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\FileTreeControl.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\FilePermsControl.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\FileWatcherControl.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\WdsListControl.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\PacMan.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\DrawTextCache.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\TreeListControl.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\TreeMap.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\TreeMapLayout.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\HilbertMooreTreeMap.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\FlameGraph.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\Sunburst.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\XYSlider.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\CsvLoader.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\DarkMode.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\UiAppearance.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\UiControls.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\UiDialogs.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\UiFramework.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\MessageBoxDlg.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\ProgressDlg.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\WinDirStatModel.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\WinDirStatModel.Actions.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\Filtering.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\Item.Extended.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\PagePrompts.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\ControlView.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\FileSearchControl.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\FinderBasic.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\FinderMtp.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\FinderRemote.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\FinderWsl.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\StorageSource.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\FinderNtfs.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\RecoveryExFat.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\RecoveryFat.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\RecoveryNtfs.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\RecoveryShared.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\SmartClean.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\DuplicateClean.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\AppMigrate.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\JianYingClean.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\JianYingCleanDlg.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\DonateDlg.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\HelpersTasks.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\xxhash.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\LegacyOsCompat.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\HelpersInterface.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\Item.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\ItemDupe.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\ItemPerm.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\ItemSearch.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\ItemTop.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\Layout.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\LayoutPopup.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\Localization.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\MainFrame.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\MainFrame.Commands.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\Options.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\PageAdvanced.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\PageCleanups.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\PageFiltering.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\PagePermissions.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\PageGeneral.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\PageFileTree.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\PageShared.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\PageTreeMap.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\Property.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\SearchDlg.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\SmartCleanDlg.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\DuplicateCleanDlg.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\AppMigrateDlg.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\RecoveryDlg.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\pch.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\ExtensionView.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\FileInfoView.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\WinDirStatPane.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\GraphView.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\VisualizationPane.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\StorageAnalyticsView.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\FileTabbedView.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\FileTreeView.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\TreeMapView.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\FlameGraphView.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\SunburstView.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\WinDirStat.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\ColorButton.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\IconHandler.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\AboutDlg.obj
+  E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\SelectDrivesDlg.obj
+  正在生成代码
+  已完成代码的生成
+  windirstat.vcxproj -> E:\projects\opensource\windirstat\build\DiskSeek_x64.exe
+FinalizeBuildStatus:
+  正在删除文件“E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\windirstat.tlog\unsuccessfulbuild”。
+  正在对“E:\projects\opensource\windirstat\intermediate\x64_Release\windirstat\windirstat.tlog\windirstat.lastbuildstate”执行 Touch 任务。
+已完成生成项目“E:\projects\opensource\windirstat\windirstat\windirstat.vcxproj”(默认目标)的操作。
+已完成生成项目“E:\projects\opensource\windirstat\windirstat.sln”(Clean;Build 个目标)的操作。
+
+已成功生成。
+
+“E:\projects\opensource\windirstat\windirstat.sln”(Clean;Build 目标) (1) ->
+“E:\projects\opensource\windirstat\windirstat\windirstat.vcxproj”(默认目标) (2:2) ->
+(ClCompile 目标) -> 
+  E:\projects\opensource\windirstat\windirstat\SmartClean.cpp(505,62): warning C4100: 'state': 未引用的参数 [E:\projects\opensource\windirstat\windirstat\windirstat.vcxproj]
+  E:\projects\opensource\windirstat\windirstat\DuplicateClean.cpp(98,29): warning C4189: “i”: 局部变量已初始化但不引用 [E:\projects\opensource\windirstat\windirstat\windirstat.vcxproj]
+  E:\projects\opensource\windirstat\windirstat\SmartClean.cpp(735,1): warning C4010: 单行注释包含行继续符 [E:\projects\opensource\windirstat\windirstat\windirstat.vcxproj]
+
+
+“E:\projects\opensource\windirstat\windirstat.sln”(Clean;Build 目标) (1) ->
+“E:\projects\opensource\windirstat\windirstat\windirstat.vcxproj”(默认目标) (2:2) ->
+  E:\projects\opensource\windirstat\windirstat\AppMigrate.cpp(157,46): warning C4100: 'total': 未引用的参数 [E:\projects\opensource\windirstat\windirstat\windirstat.vcxproj]
+  E:\projects\opensource\windirstat\windirstat\AppMigrate.cpp(198,29): warning C4189: “i”: 局部变量已初始化但不引用 [E:\projects\opensource\windirstat\windirstat\windirstat.vcxproj]
+  E:\projects\opensource\windirstat\windirstat\AppMigrate.cpp(276,36): warning C4100: 'preset': 未引用的参数 [E:\projects\opensource\windirstat\windirstat\windirstat.vcxproj]
+
+    6 个警告
+    0 个错误
+
+已用时间 00:00:28.25
+适用于 .NET Framework MSBuild 版本 17.14.60+43b635718
+生成启动时间为 2026/11/21 18:31:28。
+
+项目“E:\projects\opensource\windirstat\windirstat.sln”在节点 1 上(Clean;Build 个目标)。
+ValidateSolutionConfiguration:
+  正在生成解决方案配置“Release|ARM64”。
+项目“E:\projects\opensource\windirstat\windirstat.sln”(1)正在节点 1 上生成“E:\projects\opensource\windirstat\windirstat\windirstat.vcxproj”(2) (Clean 个目标)。
+GetGitRevision:
+  18b71f88758ff2cc5bc6361af7ce53c38be0ad73
+  Retrieved for HEAD $(GitRevision) = '18b71f88758ff2cc5bc6361af7ce53c38be0ad73'.
+GetGitDate:
+  2026-11-21
+  Retrieved date for last commit $(GitDate) = '2026-11-21'.
+GetGitCount:
+  2219
+  Retrieved for $(GitCount) = '2219'.
+已完成生成项目“E:\projects\opensource\windirstat\windirstat\windirstat.vcxproj”(Clean 个目标)的操作。
+项目“E:\projects\opensource\windirstat\windirstat.sln”(1)正在节点 1 上生成“E:\projects\opensource\windirstat\windirstat\windirstat.vcxproj”(2:2) (默认目标)。
+DownloadWslHeaders:
+  "C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "E:\projects\opensource\windirstat\windirstat\Build\Download Linux Headers.ps1" -Path "E:\projects\opensource\windirstat\windirstat\..\contrib\linux-headers"
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(463,5): error MSB8020: 无法找到 v143 的生成工具(平台工具集 =“v143”)。若要使用 v143 生成工具进行生成，请安装 v143 生成工具。或者，可以升级到当前 Visual Studio 工具，方式是通过选择“项目”菜单或右键单击该解决方案，然后选择“重定解决方案目标”。 [E:\projects\opensource\windirstat\windirstat\windirstat.vcxproj]
+已完成生成项目“E:\projects\opensource\windirstat\windirstat\windirstat.vcxproj”(默认目标)的操作 - 失败。
+已完成生成项目“E:\projects\opensource\windirstat\windirstat.sln”(Clean;Build 个目标)的操作 - 失败。
+
+生成失败。
+
+“E:\projects\opensource\windirstat\windirstat.sln”(Clean;Build 目标) (1) ->
+“E:\projects\opensource\windirstat\windirstat\windirstat.vcxproj”(默认目标) (2:2) ->
+(PrepareForBuild 目标) -> 
+  C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(463,5): error MSB8020: 无法找到 v143 的生成工具(平台工具集 =“v143”)。若要使用 v143 生成工具进行生成，请安装 v143 生成工具。或者，可以升级到当前 Visual Studio 工具，方式是通过选择“项目”菜单或右键单击该解决方案，然后选择“重定解决方案目标”。 [E:\projects\opensource\windirstat\windirstat\windirstat.vcxproj]
+
+    0 个警告
+    1 个错误
+
+已用时间 00:00:00.48
+Done Adding Additional Store
+Successfully signed: E:\projects\opensource\windirstat\build\DiskSeek_x64.exe
+Successfully signed: E:\projects\opensource\windirstat\build\DiskSeek_x86.exe
+WiX Toolset not found; MSI build failed
+Install via: dotnet tool install --global wix

@@ -72,7 +72,7 @@ IF EXIST "temp_wxl" RD /S /Q "temp_wxl"
 
 :: verify the multilingual packages before publishing
 POWERSHELL -NoLogo -NoProfile -ExecutionPolicy Bypass -Command ^
-   "& '..\..\tests\Test-Installer.ps1' -MsiPath @('%BLDDIR%\WinDirStat-arm64.msi','%BLDDIR%\WinDirStat-x86.msi','%BLDDIR%\WinDirStat-x64.msi')"
+   "& '..\..\tests\Test-Installer.ps1' -MsiPath @('%BLDDIR%\DiskSeek-arm64.msi','%BLDDIR%\DiskSeek-x86.msi','%BLDDIR%\DiskSeek-x64.msi')"
 IF ERRORLEVEL 1 EXIT /B 1
 
 EXIT /B 0

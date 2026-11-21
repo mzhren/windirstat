@@ -3,6 +3,8 @@
   <PropertyGroup>
     <WslLLVMDirectory>$(VCInstallDir)Tools\Llvm\x64\bin\</WslLLVMDirectory>
     <WslLLVMDirectory Condition="!Exists('$(WslLLVMDirectory)clang.exe') And Exists('$(VCInstallDir)Tools\Llvm\ARM64\bin\clang.exe')">$(VCInstallDir)Tools\Llvm\ARM64\bin\</WslLLVMDirectory>
+    <!-- Contributors often have the standalone LLVM toolchain instead of the Visual Studio Clang component -->
+    <WslLLVMDirectory Condition="!Exists('$(WslLLVMDirectory)clang.exe') And Exists('$(ProgramFiles)\LLVM\bin\clang.exe')">$(ProgramFiles)\LLVM\bin\</WslLLVMDirectory>
     <WslRunnerDirectory>$(MSBuildProjectDirectory)\..\Build\Temp\WSL\$(Platform)\$(Configuration)\</WslRunnerDirectory>
     <WslHeadersDirectory>$(MSBuildProjectDirectory)\..\contrib\linux-headers</WslHeadersDirectory>
     <WslHeadersScript>$(MSBuildThisFileDirectory)Download Linux Headers.ps1</WslHeadersScript>
@@ -29,7 +31,8 @@ IF ERRORLEVEL 1 EXIT /B 1</Command>
   </ItemGroup>
   <Target Name="DownloadWslHeaders" BeforeTargets="PrepareForBuild" DependsOnTargets="CheckWslCompiler"
     Condition="'$(DesignTimeBuild)' != 'true'">
-    <Exec Command="powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -File &quot;$(WslHeadersScript)&quot; -Path &quot;$(WslHeadersDirectory)&quot;" />
+    <!-- Resolve PowerShell by path; bare names fail when PATH is stripped in some environments -->
+    <Exec Command="&quot;$(SystemRoot)\System32\WindowsPowerShell\v1.0\powershell.exe&quot; -NoProfile -NonInteractive -ExecutionPolicy Bypass -File &quot;$(WslHeadersScript)&quot; -Path &quot;$(WslHeadersDirectory)&quot;" />
   </Target>
   <Target Name="CheckWslCompiler" BeforeTargets="CustomBuild" Condition="'$(DesignTimeBuild)' != 'true'">
     <Error Condition="!Exists('$(WslLLVMDirectory)clang.exe') Or !Exists('$(WslLLVMDirectory)ld.lld.exe')"

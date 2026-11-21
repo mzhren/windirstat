@@ -31,6 +31,7 @@ SET "LIBURL=https://github.com/WinDirStat/WinDirStat"
 :: prepend 7-Zip and system paths
 IF EXIST "%ProgramFiles%\7-Zip" SET PATH=%ProgramFiles%\7-Zip;%PATH%
 IF EXIST "%ProgramFiles(x86)%\7-Zip" SET PATH=%ProgramFiles(x86)%\7-Zip;%PATH%
+IF EXIST "%USERPROFILE%\.dotnet\tools" SET PATH=%USERPROFILE%\.dotnet\tools;%PATH%
 SET PATH=%WINDIR%\system32;%WINDIR%\system32\WindowsPowerShell\v1.0;%PATH%
 SET "POWERSHELL=POWERSHELL.EXE -NoProfile -NonInteractive -NoLogo -ExecutionPolicy Bypass"
 
@@ -40,14 +41,31 @@ IF /I "%RELTYPE%" EQU "PRODUCTION" SET PRODUCTION=1
 
 :: import vs build tools
 IF EXIST "%BLDDIR%" RD /S /Q "%BLDDIR%"
+SET "VSPATH="
 FOR /F "USEBACKQ TOKENS=*" %%X in (`
     "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" ^
         -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 ^
         -property installationPath
-`) DO CALL "%%X\Common7\Tools\VsDevCmd.bat"
-IF EXIST "%WindowsSdkVerBinPath%\x86" msbuild "%BASEDIR%\windirstat.sln" /p:Configuration=Release /t:Clean;Build /p:Platform=Win32,ExternalCompilerOptions=/DPRODUCTION=%PRODUCTION%
-IF EXIST "%WindowsSdkVerBinPath%\x64" msbuild "%BASEDIR%\windirstat.sln" /p:Configuration=Release /t:Clean;Build /p:Platform=x64,ExternalCompilerOptions=/DPRODUCTION=%PRODUCTION%
-IF EXIST "%WindowsSdkVerBinPath%\arm64" msbuild "%BASEDIR%\windirstat.sln" /p:Configuration=Release /t:Clean;Build /p:Platform=ARM64,ExternalCompilerOptions=/DPRODUCTION=%PRODUCTION%
+`) DO (
+    SET "VSPATH=%%X"
+    CALL "%%X\Common7\Tools\VsDevCmd.bat"
+)
+
+:: the project targets the v145 toolset (Visual Studio 2026); fall back to
+:: the v143 toolset when the instance does not ship it so local builds still
+:: succeed with an otherwise compatible compiler
+SET "TOOLSET=v145"
+IF NOT EXIST "%VSPATH%\MSBuild\Microsoft\VC\v170\Platforms\x64\PlatformToolsets\v145" SET "TOOLSET=v143"
+
+:: skip platforms whose build tools are not installed in this instance
+IF EXIST "%VSPATH%\MSBuild\Microsoft\VC\v170\Platforms\Win32\PlatformToolsets\%TOOLSET%" SET "PLAT32=1"
+IF EXIST "%VSPATH%\MSBuild\Microsoft\VC\v170\Platforms\x64\PlatformToolsets\%TOOLSET%" SET "PLATX64=1"
+IF EXIST "%VSPATH%\MSBuild\Microsoft\VC\v170\Platforms\ARM64\PlatformToolsets\%TOOLSET%" SET "PLATARM64=1"
+
+IF DEFINED PLAT32 IF EXIST "%WindowsSdkVerBinPath%\x86" msbuild "%BASEDIR%\windirstat.sln" /p:Configuration=Release /t:Clean;Build /p:Platform=Win32,ExternalCompilerOptions=/DPRODUCTION=%PRODUCTION% /p:PlatformToolset=%TOOLSET%
+IF DEFINED PLATX64 IF EXIST "%WindowsSdkVerBinPath%\x64" msbuild "%BASEDIR%\windirstat.sln" /p:Configuration=Release /t:Clean;Build /p:Platform=x64,ExternalCompilerOptions=/DPRODUCTION=%PRODUCTION% /p:PlatformToolset=%TOOLSET%
+IF DEFINED PLATARM64 IF EXIST "%WindowsSdkVerBinPath%\arm64" msbuild "%BASEDIR%\windirstat.sln" /p:Configuration=Release /t:Clean;Build /p:Platform=ARM64,ExternalCompilerOptions=/DPRODUCTION=%PRODUCTION% /p:PlatformToolset=%TOOLSET%
+IF NOT DEFINED PLATARM64 ECHO ARM64 build tools are not installed; skipping the ARM64 platform.
 
 :: try signing the main executables
 signtool sign /fd sha256 /tr %TSAURL% /td sha256 /d %LIBNAME% /du %LIBURL% "%BLDDIR%\*.exe"
@@ -70,6 +88,15 @@ FOR %%A IN (arm64 x86 x64) DO (
 %POWERSHELL% -File "%THISDIR%\setup\store\build-store-msix.ps1" -OutDir "%PUBDIR%"
 IF ERRORLEVEL 1 EXIT /B 1
 
+:: stamp the published executables, symbols, and archives with the file version;
+:: runs after the msi/msix steps because they expect the plain DiskSeek.exe names
+FOR /F "usebackq delims=" %%V IN (`POWERSHELL -NoProfile -Command "(Get-Item -LiteralPath (Get-ChildItem '%BLDDIR%\DiskSeek_*.exe' | Select-Object -First 1).FullName).VersionInfo.FileVersion"`) DO SET FILEVER=%%V
+IF "%FILEVER%" EQU "" EXIT /B 1
+FOR %%A IN (arm64 x86 x64) DO (
+   IF EXIST "%PUBDIR%\%%A\DiskSeek.exe" REN "%PUBDIR%\%%A\DiskSeek.exe" "DiskSeek-%FILEVER%-%%A.exe"
+   IF EXIST "%PUBDIR%\%%A\DiskSeek.pdb" REN "%PUBDIR%\%%A\DiskSeek.pdb" "DiskSeek-%FILEVER%-%%A.pdb"
+)
+
 :: sign the msi, msix, and msixbundle
 signtool sign /fd sha256 /tr %TSAURL% /td sha256 /d %LIBNAME% /du %LIBURL% "%PUBDIR%\*.msi*"
 IF ERRORLEVEL 1 ECHO MSI/MSIX signing failed; continuing without a signed MSI.
@@ -77,9 +104,9 @@ IF ERRORLEVEL 1 ECHO MSI/MSIX signing failed; continuing without a signed MSI.
 :: archive executables and debug files
 7z.EXE >NUL 2>&1
 IF %ERRORLEVEL% NEQ 0 ECHO 7-Zip not found; skipping archives
-IF %ERRORLEVEL% EQU 0 7z.EXE a -mx=9 -mf=off "%PUBDIR%\DiskSeek.7z" "%PUBDIR%\*\*.exe"
-IF %ERRORLEVEL% EQU 0 7z.EXE a -mx=9 -mf=off "%PUBDIR%\DiskSeek-DebugSymbols.7z" "%PUBDIR%\*\*.pdb"
-IF %ERRORLEVEL% EQU 0 7z.EXE a -tzip -mx=9 "%PUBDIR%\DiskSeek.zip" "%PUBDIR%\*\*.exe"
+IF %ERRORLEVEL% EQU 0 7z.EXE a -mx=9 -mf=off "%PUBDIR%\DiskSeek-%FILEVER%.7z" "%PUBDIR%\*\*.exe"
+IF %ERRORLEVEL% EQU 0 7z.EXE a -mx=9 -mf=off "%PUBDIR%\DiskSeek-%FILEVER%-DebugSymbols.7z" "%PUBDIR%\*\*.pdb"
+IF %ERRORLEVEL% EQU 0 7z.EXE a -tzip -mx=9 "%PUBDIR%\DiskSeek-%FILEVER%.zip" "%PUBDIR%\*\*.exe"
 DEL /F /S /Q "%PUBDIR%\*.pdb" >NUL 2>&1
 
 :: output hash information
