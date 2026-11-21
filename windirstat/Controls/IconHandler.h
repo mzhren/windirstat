@@ -109,6 +109,7 @@ namespace Icons
     void PaintDuplicateClean(Graphics& g);
     void PaintMigrateWeChat(Graphics& g);
     void PaintMigrateWps(Graphics& g);
+    void PaintJianYingClean(Graphics& g);
     void PaintFilter(Graphics& g, bool active = false);
     void PaintHelp(Graphics& g);
     void PaintPause(Graphics& g);

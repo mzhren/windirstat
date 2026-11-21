@@ -443,6 +443,25 @@ namespace Icons
         g.FillRectangle(&lines, 34, 48, 16, 3);
     }
 
+    void PaintJianYingClean(Graphics& g)
+    {
+        // Video-editor play tile
+        const SolidBrush tile(C(0, 152, 220));
+        g.FillEllipse(&tile, 4, 10, 50, 50);
+        const SolidBrush play(C(255, 255, 255));
+        const Point playShape[] = { {21, 24}, {21, 46}, {39, 35} };
+        g.FillPolygon(&play, playShape, static_cast<INT>(std::size(playShape)));
+
+        // Cleanup sparkle accent
+        Pen sparklePen(C(255, 190, 60), 4);
+        sparklePen.SetStartCap(LineCapRound);
+        sparklePen.SetEndCap(LineCapRound);
+        g.DrawLine(&sparklePen, 52, 6, 52, 18);
+        g.DrawLine(&sparklePen, 46, 12, 58, 12);
+        g.DrawLine(&sparklePen, 44, 40, 44, 48);
+        g.DrawLine(&sparklePen, 40, 44, 48, 44);
+    }
+
     void PaintFilter(Graphics& g, const bool active)
     {
         const Point funnelShape[] = { {8, 6}, {56, 6}, {56, 14}, {38, 34}, {38, 56}, {26, 52}, {26, 34}, {8, 14} };

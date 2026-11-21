@@ -31,6 +31,7 @@
 #define IDD_SMARTCLEAN                  126
 #define IDD_DUPLICATECLEAN              127
 #define IDD_APPMIGRATE                  128
+#define IDD_JIANYINGCLEAN               129
 #define IDC_SMARTCLEAN_LIST             1240
 #define IDC_SMARTCLEAN_DESC             1241
 #define IDC_SMARTCLEAN_STATUS           1242
@@ -53,6 +54,13 @@
 #define IDC_APPMIGRATE_DESTPATH         1265
 #define IDC_APPMIGRATE_MIGRATE          1266
 #define IDC_APPMIGRATE_DESTLABEL        1267
+#define IDC_JIANYING_LIST               1270
+#define IDC_JIANYING_DESC               1271
+#define IDC_JIANYING_STATUS             1272
+#define IDC_JIANYING_NOTE               1273
+#define IDC_JIANYING_SELECTALL          1274
+#define IDC_JIANYING_SCAN               1275
+#define IDC_JIANYING_CLEAN              1276
 #define IDC_ADD_CLEANUP                 1000
 #define IDC_ADD_FOLDER                  1001
 #define IDC_ASKFORCONFIRMATION          1002
@@ -460,6 +468,7 @@
 #define ID_CLEANUP_DUPCLEAN             32972
 #define ID_CLEANUP_MIGRATE_WECHAT       32973
 #define ID_CLEANUP_MIGRATE_WPS          32974
+#define ID_CLEANUP_JIANYING             32975
 #define IDS_APP_TITLE                   57344
 #define IDS_AUTHOR_EMAIL                57345
 #define IDS_FILTER_EXAMPLE_DIRS         57346
@@ -474,9 +483,9 @@
 //
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        129
-#define _APS_NEXT_COMMAND_VALUE         32975
-#define _APS_NEXT_CONTROL_VALUE         1268
+#define _APS_NEXT_RESOURCE_VALUE        130
+#define _APS_NEXT_COMMAND_VALUE         32976
+#define _APS_NEXT_CONTROL_VALUE         1277
 #define _APS_NEXT_SYMED_VALUE           126
 #endif
 #endif

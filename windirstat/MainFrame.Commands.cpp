@@ -16,6 +16,7 @@
 #include "SmartCleanDlg.h"
 #include "DuplicateCleanDlg.h"
 #include "AppMigrateDlg.h"
+#include "JianYingCleanDlg.h"
 #include "ExtensionView.h"
 #include "ProgressDlg.h"
 #include "RecoveryDlg.h"
@@ -712,6 +713,7 @@ void CMainFrame::RebuildToolBar(const bool rebuildButtons)
         { ID_CLEANUP_DUPCLEAN,        IDS_DUPCLEAN_BTN,            Icons::PaintDuplicateClean},
         { ID_CLEANUP_MIGRATE_WECHAT,  IDS_MIGRATE_WECHAT_BTN,      Icons::PaintMigrateWeChat},
         { ID_CLEANUP_MIGRATE_WPS,     IDS_MIGRATE_WPS_BTN,         Icons::PaintMigrateWps},
+        { ID_CLEANUP_JIANYING,        IDS_JIANYING_BTN,            Icons::PaintJianYingClean},
         { ID_SEPARATOR,               {},{}},
         { ID_WATCHER_LABEL,           IDS_WATCHER,                 {}},
         { ID_WATCHER_START,           {},                          Icons::Char(L'▶', RGB( 50, 205,  50))},
@@ -960,6 +962,11 @@ void CMainFrame::OnMigrateWeChat()
 void CMainFrame::OnMigrateWps()
 {
     CAppMigrateDlg(AppMigrate::Preset::Wps).ShowModal();
+}
+
+void CMainFrame::OnJianYingClean()
+{
+    CJianYingCleanDlg().ShowModal();
 }
 
 void CMainFrame::OnConfigure()

@@ -328,6 +328,7 @@ protected:
     void OnDuplicateClean();
     void OnMigrateWeChat();
     void OnMigrateWps();
+    void OnJianYingClean();
     void OnDestroy();
     LRESULT OnTaskButtonCreated(WPARAM, LPARAM);
     UINT OnPowerBroadcast(UINT, LPARAM);
@@ -404,6 +405,7 @@ inline std::span<const RouteEntry> CMainFrame::Routes()
         Route::Command<&OnDuplicateClean>(ID_CLEANUP_DUPCLEAN),
         Route::Command<&OnMigrateWeChat>(ID_CLEANUP_MIGRATE_WECHAT),
         Route::Command<&OnMigrateWps>(ID_CLEANUP_MIGRATE_WPS),
+        Route::Command<&OnJianYingClean>(ID_CLEANUP_JIANYING),
         Route::Command<&OnViewShowFileTypes>(ID_VIEW_SHOWFILETYPES),
         Route::Command<&OnViewShowVisualization>(ID_VIEW_SHOWVISUALIZATION),
         Route::Command<&OnViewTreeMapStyle>(ID_VIEW_TREEMAP_ROWS, ID_VIEW_TREEMAP_MOORE),
