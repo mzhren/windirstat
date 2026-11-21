@@ -17,6 +17,7 @@
 #include "DuplicateCleanDlg.h"
 #include "AppMigrateDlg.h"
 #include "JianYingCleanDlg.h"
+#include "DonateDlg.h"
 #include "ExtensionView.h"
 #include "ProgressDlg.h"
 #include "RecoveryDlg.h"
@@ -708,6 +709,7 @@ void CMainFrame::RebuildToolBar(const bool rebuildButtons)
         { ID_SEPARATOR,               {},{}},
         { ID_CONFIGURE,               IDS_MENU_SETTINGS,           Icons::PaintGear},
         { ID_HELP_MANUAL,             IDS_HELP_MANUAL,             Icons::PaintHelp},
+        { ID_HELP_DONATE,             IDS_DONATE_BTN,              Icons::PaintDonate},
         { ID_SEPARATOR,               {},{}},
         { ID_CLEANUP_SMARTCLEAN,      IDS_SMARTCLEAN_BTN,          Icons::PaintSmartClean},
         { ID_CLEANUP_DUPCLEAN,        IDS_DUPCLEAN_BTN,            Icons::PaintDuplicateClean},
@@ -967,6 +969,11 @@ void CMainFrame::OnMigrateWps()
 void CMainFrame::OnJianYingClean()
 {
     CJianYingCleanDlg().ShowModal();
+}
+
+void CMainFrame::OnDonate()
+{
+    CDonateDlg().ShowModal();
 }
 
 void CMainFrame::OnConfigure()

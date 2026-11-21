@@ -462,6 +462,26 @@ namespace Icons
         g.DrawLine(&sparklePen, 40, 44, 48, 44);
     }
 
+    void PaintDonate(Graphics& g)
+    {
+        // Rounded heart: one closed cubic-bezier outline, no sharp corners
+        GraphicsPath heart;
+        heart.AddBezier(32, 55, 15, 43, 5, 33, 5, 22);
+        heart.AddBezier(5, 22, 5, 11, 13, 7, 19, 7);
+        heart.AddBezier(19, 7, 25, 7, 30, 10, 32, 15);
+        heart.AddBezier(32, 15, 34, 10, 39, 7, 45, 7);
+        heart.AddBezier(45, 7, 51, 7, 59, 11, 59, 22);
+        heart.AddBezier(59, 22, 59, 33, 49, 43, 32, 55);
+        heart.CloseFigure();
+
+        const SolidBrush fill(C(232, 62, 88));
+        g.FillPath(&fill, &heart);
+
+        // Soft rounded highlight on the left lobe
+        const SolidBrush shine(C(255, 255, 255, 90));
+        g.FillEllipse(&shine, 14, 13, 9, 6);
+    }
+
     void PaintFilter(Graphics& g, const bool active)
     {
         const Point funnelShape[] = { {8, 6}, {56, 6}, {56, 14}, {38, 34}, {38, 56}, {26, 52}, {26, 34}, {8, 14} };

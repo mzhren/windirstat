@@ -541,6 +541,19 @@ BEGIN
     DEFPUSHBUTTON   "IDS_SMARTCLEAN_CLEAN",IDC_JIANYING_CLEAN,363,240,70,15
 END
 
+IDD_DONATE DIALOGEX 0, 0, 310, 160
+STYLE DS_SETFONT | WS_POPUP | WS_CAPTION | WS_SYSMENU | DS_MODALFRAME
+CAPTION "IDS_DONATE_TITLE"
+FONT 8, "MS Shell Dlg 2", 400, 0, 0x1
+BEGIN
+    LTEXT           "IDS_DONATE_NOTE",IDC_DONATE_NOTE,7,7,296,10
+    CONTROL         "",IDC_DONATE_WX,"Static",SS_OWNERDRAW,7,20,148,104
+    CONTROL         "",IDC_DONATE_ALI,"Static",SS_OWNERDRAW,155,20,148,104
+    CTEXT           "IDS_DONATE_WECHAT",IDC_DONATE_WXLABEL,7,126,148,10
+    CTEXT           "IDS_DONATE_ALIPAY",IDC_DONATE_ALILABEL,155,126,148,10
+    PUSHBUTTON      "IDS_DONATE_CLOSE",IDCANCEL,125,140,60,14
+END
+
 IDD_S3_CONNECTION DIALOGEX 0, 0, 316, 193
 STYLE DS_SETFONT | DS_CONTROL | WS_CHILD | WS_CAPTION
 EXSTYLE WS_EX_CONTROLPARENT
@@ -1071,6 +1084,10 @@ IDR_LANGS               TEXT                    "res\\lang_combined.bin"
 IDR_WSLSCAN_X64         RCDATA                  "FinderWslRunner-x86_64"
 
 IDR_WSLSCAN_ARM64       RCDATA                  "FinderWslRunner-aarch64"
+
+IDR_DONATE_WX           RCDATA                  "res\\donate_wx.png"
+
+IDR_DONATE_ALI          RCDATA                  "res\\donate_ali.png"
 
 
 /////////////////////////////////////////////////////////////////////////////

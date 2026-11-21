@@ -204,6 +204,7 @@ POWERSHELL.EXE -NoLogo -ExecutionPolicy Unrestricted -NoProfile -File "$(Project
     <ClInclude Include="Dialogs\DuplicateCleanDlg.h" />
     <ClInclude Include="Dialogs\AppMigrateDlg.h" />
     <ClInclude Include="Dialogs\JianYingCleanDlg.h" />
+    <ClInclude Include="Dialogs\DonateDlg.h" />
     <ClInclude Include="Dialogs\SmartCleanDlg.h" />
     <ClInclude Include="RecoveryExFat.h" />
     <ClInclude Include="RecoveryFat.h" />
@@ -311,6 +312,7 @@ POWERSHELL.EXE -NoLogo -ExecutionPolicy Unrestricted -NoProfile -File "$(Project
     </ClCompile>
     <ClCompile Include="JianYingClean.cpp" />
     <ClCompile Include="Dialogs\JianYingCleanDlg.cpp" />
+    <ClCompile Include="Dialogs\DonateDlg.cpp" />
     <ClCompile Include="HelpersTasks.cpp">
     </ClCompile>
     <ClCompile Include="..\contrib\xxhash\xxhash.c">

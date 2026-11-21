@@ -235,6 +235,9 @@
     <ClInclude Include="Dialogs\JianYingCleanDlg.h">
       <Filter>Header Files\User Interface\Dialogs</Filter>
     </ClInclude>
+    <ClInclude Include="Dialogs\DonateDlg.h">
+      <Filter>Header Files\User Interface\Dialogs</Filter>
+    </ClInclude>
     <ClInclude Include="Dialogs\RecoveryDlg.h">
       <Filter>Header Files\User Interface\Dialogs</Filter>
     </ClInclude>
@@ -526,6 +529,9 @@
       <Filter>Source Files\User Interface\Dialogs</Filter>
     </ClCompile>
     <ClCompile Include="Dialogs\JianYingCleanDlg.cpp">
+      <Filter>Source Files\User Interface\Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="Dialogs\DonateDlg.cpp">
       <Filter>Source Files\User Interface\Dialogs</Filter>
     </ClCompile>
     <ClCompile Include="Dialogs\RecoveryDlg.cpp">
