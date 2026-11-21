@@ -55,6 +55,11 @@ protected:
     static constexpr UINT CMD_MIGRATE = 0xE0000001;
     static constexpr UINT CMD_SYSADVANCED = 0xE0000002;
     static constexpr UINT CMD_SYSPROTECT = 0xE0000003;
+    static constexpr UINT CMD_GEEK = 0xE0000004;
+    static constexpr UINT CMD_BCU = 0xE0000005;
+
+    // Third-party uninstallers launchable from the program-folder hint
+    enum class Uninstaller : std::uint8_t { Geek, Bcu };
 
     struct ActionButton
     {
@@ -72,6 +77,7 @@ protected:
     Protection ClassifyProtection(const CItem* item, DWORD attributes) const;
     std::wstring MigratableHint(const CItem* item) const;
     void OnMigrate();
+    void OnLaunchUninstaller(Uninstaller uninstaller);
 
     bool m_show = true;            // Whether this pane is shown (F8 option)
     CItem* m_item = nullptr;       // Item described by the pane (first selection)

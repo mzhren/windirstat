@@ -42,6 +42,10 @@ protected:
     static bool IsContextMenuRegistered(HKEY root);
     static bool SetContextMenuRegistration(bool enable);
 
+    void OnBrowseGeek();
+    void OnBrowseBcu();
+    void OnBrowseUninstaller(UINT editId);
+
 public:
     static std::span<const RouteEntry> Routes();
 
@@ -62,6 +66,8 @@ inline std::span<const RouteEntry> CPageGeneral::Routes()
         Route::Control<&OnSettingChanged>(BN_CLICKED, IDC_USE_WINDOWS_LOCALE),
         Route::Control<&OnSettingChanged>(BN_CLICKED, IDC_DARK_MODE_DISABLED, IDC_DARK_MODE_USE_WINDOWS),
         Route::Control<&OnSettingChanged>(CBN_SELENDOK, IDC_COMBO),
+        Route::Control<&OnBrowseGeek>(BN_CLICKED, IDC_GEEK_BROWSE),
+        Route::Control<&OnBrowseBcu>(BN_CLICKED, IDC_BCU_BROWSE),
     };
     return entries;
 }

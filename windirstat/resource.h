@@ -69,6 +69,10 @@
 #define IDC_DONATE_NOTE                 1282
 #define IDC_DONATE_WXLABEL              1283
 #define IDC_DONATE_ALILABEL             1284
+#define IDC_GEEK_PATH                   1285
+#define IDC_BCU_PATH                    1286
+#define IDC_GEEK_BROWSE                 1287
+#define IDC_BCU_BROWSE                  1288
 #define IDC_ADD_CLEANUP                 1000
 #define IDC_ADD_FOLDER                  1001
 #define IDC_ASKFORCONFIRMATION          1002
@@ -494,7 +498,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        133
 #define _APS_NEXT_COMMAND_VALUE         32977
-#define _APS_NEXT_CONTROL_VALUE         1285
+#define _APS_NEXT_CONTROL_VALUE         1289
 #define _APS_NEXT_SYMED_VALUE           126
 #endif
 #endif

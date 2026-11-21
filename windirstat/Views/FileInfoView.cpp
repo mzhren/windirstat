@@ -33,6 +33,103 @@ namespace
         std::wstring folder(buffer);
         return MakeLower(TrimString(folder, L'\\', true));
     }
+
+    // True when the path points to an existing plain file
+    bool FileExists(const std::wstring& path)
+    {
+        const DWORD attributes = GetFileAttributesW(path.c_str());
+        return attributes != INVALID_FILE_ATTRIBUTES && !(attributes & FILE_ATTRIBUTE_DIRECTORY);
+    }
+
+    // Locates a third-party uninstaller executable: registry uninstall
+    // entries first (system, 32-bit view, and per-user), then the common
+    // folders of the portable editions
+    std::wstring FindUninstaller(const bool bcu)
+    {
+        const std::wstring displayName = bcu ? L"bulk crap uninstaller" : L"geek uninstaller";
+        const std::wstring folderName = bcu ? L"\\bulk crap uninstaller" : L"\\geek uninstaller";
+        const std::vector exeNames = bcu
+            ? std::vector{ L"bcuninstaller.exe" }
+            : std::vector{ L"geek.exe", L"geekuninstaller.exe" };
+
+        // Returns the first existing executable inside the folder
+        const auto tryFolder = [&](std::wstring folder) -> std::wstring
+        {
+            TrimString(folder, L'\\', true);
+            if (folder.empty()) return {};
+            for (const wchar_t* exe : exeNames)
+            {
+                const std::wstring candidate = folder + L"\\" + exe;
+                if (FileExists(candidate)) return candidate;
+            }
+            return {};
+        };
+
+        for (const HKEY root : { HKEY_LOCAL_MACHINE, HKEY_CURRENT_USER })
+        {
+            for (const wchar_t* keyPath : {
+                LR"(SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall)",
+                LR"(SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall)" })
+            {
+                CRegKey key;
+                if (key.Open(root, keyPath, KEY_READ) != ERROR_SUCCESS) continue;
+
+                for (DWORD index = 0;; ++index)
+                {
+                    wchar_t name[256]{};
+                    DWORD nameLen = std::size(name);
+                    if (RegEnumKeyExW(key, index, name, &nameLen, nullptr,
+                        nullptr, nullptr, nullptr) != ERROR_SUCCESS) break;
+
+                    CRegKey entry;
+                    if (entry.Open(key, name, KEY_READ) != ERROR_SUCCESS) continue;
+
+                    wchar_t display[256]{};
+                    DWORD size = sizeof(display);
+                    if (RegQueryValueExW(entry, L"DisplayName", nullptr, nullptr,
+                        reinterpret_cast<LPBYTE>(display), &size) != ERROR_SUCCESS ||
+                        !MakeLower(display).starts_with(displayName))
+                    {
+                        continue;
+                    }
+
+                    // Prefer the install folder; the DisplayIcon path names
+                    // the application executable and works for portable entries
+                    wchar_t value[MAX_PATH + 1]{};
+                    size = sizeof(value);
+                    if (RegQueryValueExW(entry, L"InstallLocation", nullptr, nullptr,
+                        reinterpret_cast<LPBYTE>(value), &size) == ERROR_SUCCESS)
+                    {
+                        if (const std::wstring found = tryFolder(value); !found.empty()) return found;
+                    }
+
+                    size = sizeof(value);
+                    if (RegQueryValueExW(entry, L"DisplayIcon", nullptr, nullptr,
+                        reinterpret_cast<LPBYTE>(value), &size) == ERROR_SUCCESS)
+                    {
+                        std::wstring icon = value;
+                        TrimString(icon, L'"', true);
+                        if (const size_t comma = icon.find_last_of(L','); comma != std::wstring::npos)
+                        {
+                            icon.resize(comma);
+                        }
+                        if (FileExists(icon)) return icon;
+                    }
+                }
+            }
+        }
+
+        for (const wchar_t* variable :
+            { L"ProgramFiles", L"ProgramFiles(x86)", L"ProgramW6432", L"LOCALAPPDATA", L"APPDATA" })
+        {
+            if (const std::wstring found = tryFolder(GetEnvironmentFolder(variable) + folderName);
+                !found.empty())
+            {
+                return found;
+            }
+        }
+        return {};
+    }
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -256,6 +353,8 @@ void CFileInfoView::RefreshInfo()
         case Protection::InstalledProgram:
             m_notes.emplace_back(Localization::Lookup(IDS_INFO_PROT_PROGRAM));
             m_buttons.push_back({ .text = Localization::Lookup(IDS_INFO_BTN_UNINSTALL), .command = ID_CLEANUP_REMOVE_PROGRAMS, .enabled = true });
+            m_buttons.push_back({ .text = Localization::Lookup(IDS_INFO_BTN_GEEK), .command = CMD_GEEK, .enabled = true });
+            m_buttons.push_back({ .text = Localization::Lookup(IDS_INFO_BTN_BCU), .command = CMD_BCU, .enabled = true });
             break;
         case Protection::SystemDriver:
             m_notes.emplace_back(Localization::Lookup(IDS_INFO_PROT_DRIVER));
@@ -465,6 +564,29 @@ void CFileInfoView::OnMigrate()
     if (!refresh.empty())
     {
         CWinDirStatModel::Get()->RefreshItem(refresh);
+    }
+}
+
+void CFileInfoView::OnLaunchUninstaller(const Uninstaller uninstaller)
+{
+    const bool bcu = uninstaller == Uninstaller::Bcu;
+
+    // The user-specified path from the settings wins over detection
+    const std::wstring preferred = bcu ? COptions::BcuUninstallerPath.Obj() : COptions::GeekUninstallerPath.Obj();
+    std::wstring executable = FileExists(preferred) ? preferred : FindUninstaller(bcu);
+    if (!executable.empty())
+    {
+        ShellExecuteWrapper(executable, {}, {}, GetMainWindowHandle());
+        return;
+    }
+
+    // Not installed: offer the official download page
+    const std::wstring message = Localization::Lookup(bcu ? IDS_INFO_BCU_MISSING : IDS_INFO_GEEK_MISSING);
+    if (MessageBoxW(GetMainWindowHandle(), message.c_str(), GetAppTitle().c_str(),
+        MB_YESNO | MB_ICONINFORMATION) == IDYES)
+    {
+        ShellExecuteWrapper(bcu ? L"https://www.bcuninstaller.com" : L"https://geekuninstaller.com",
+            {}, {}, GetMainWindowHandle());
     }
 }
 
@@ -783,6 +905,12 @@ void CFileInfoView::OnLButtonUp(const UINT /*nFlags*/, const CPoint point)
     {
     case CMD_MIGRATE:
         OnMigrate();
+        break;
+    case CMD_GEEK:
+        OnLaunchUninstaller(Uninstaller::Geek);
+        break;
+    case CMD_BCU:
+        OnLaunchUninstaller(Uninstaller::Bcu);
         break;
     case CMD_SYSADVANCED:
         ShellExecuteWrapper(L"SystemPropertiesAdvanced.exe", {}, {}, GetMainWindowHandle());

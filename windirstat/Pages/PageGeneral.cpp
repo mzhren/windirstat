@@ -66,6 +66,8 @@ void CPageGeneral::InitializePage()
     m_combo.SubclassDlgItem(IDC_COMBO, this);
 
     LoadBinds(CheckboxBindings);
+    SetText(IDC_GEEK_PATH, COptions::GeekUninstallerPath.Obj());
+    SetText(IDC_BCU_PATH, COptions::BcuUninstallerPath.Obj());
     const int darkMode = std::clamp<int>(COptions::DarkMode, std::to_underlying(DM_DISABLED), std::to_underlying(DM_USE_WINDOWS));
     SetCheckedRadioButton(IDC_DARK_MODE_DISABLED, IDC_DARK_MODE_USE_WINDOWS, IDC_DARK_MODE_DISABLED + darkMode);
 
@@ -126,6 +128,8 @@ std::optional<CPropertyPage::ValidationError> CPageGeneral::PrepareSettings()
     Stage(COptions::DarkMode, darkMode);
 
     Stage(COptions::LanguageId, language);
+    Stage(COptions::GeekUninstallerPath, GetText(IDC_GEEK_PATH));
+    Stage(COptions::BcuUninstallerPath, GetText(IDC_BCU_PATH));
     StageEffect([portableMode, contextMenuIntegration, listChanged, formattingChanged]
     {
         if (const DWORD error = CDirStatApp::Get()->SetPortableMode(portableMode); error != ERROR_SUCCESS)
@@ -171,4 +175,26 @@ std::optional<CPropertyPage::ValidationError> CPageGeneral::PrepareSettings()
         }
     });
     return {};
+}
+
+void CPageGeneral::OnBrowseGeek()
+{
+    OnBrowseUninstaller(IDC_GEEK_PATH);
+}
+
+void CPageGeneral::OnBrowseBcu()
+{
+    OnBrowseUninstaller(IDC_BCU_PATH);
+}
+
+// Lets the user pick an executable and fills the given path edit control
+void CPageGeneral::OnBrowseUninstaller(const UINT editId)
+{
+    auto picked = CDialog::PickFile(CDialog::FilePickerMode::Open,
+        std::format(L"{} (*.exe)|*.exe|{}|*.*||",
+            Localization::Lookup(IDS_EXE_FILES), Localization::Lookup(IDS_ALL_FILES)), this);
+    if (!picked) return;
+
+    SetText(editId, *picked);
+    SetModified();
 }

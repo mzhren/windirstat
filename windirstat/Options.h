@@ -298,6 +298,8 @@ public:
     inline static Setting<int> DarkMode{ OptionsGeneral, L"DarkMode", DM_USE_WINDOWS, DM_DISABLED, DM_USE_WINDOWS };
     inline static Setting<int> FontSizePercent{ OptionsGeneral, L"FontSizePercent", 0, 0, 200 };
     inline static Setting<int> LanguageId{ OptionsGeneral, L"LanguageId", 0 };
+    inline static Setting<std::wstring> GeekUninstallerPath{ OptionsGeneral, L"GeekUninstallerPath", L"" };
+    inline static Setting<std::wstring> BcuUninstallerPath{ OptionsGeneral, L"BcuUninstallerPath", L"" };
     inline static Setting<int> ProcessPriority{ OptionsGeneral, L"ProcessPriority",
         NORMAL, LOW, HIGH, SelectionBind(IDC_PROCESS_PRIORITY) };
     inline static Setting<int> FileHashAlgorithm{ OptionsGeneral, L"FileHashAlgorithm",
